@@ -1,12 +1,6 @@
 import java.util.Date;
 
 public class Book {
-
-    /*
-    Skapad av Robin Heidari, 2021-01-27
-    
-     */
-
     private String title;
     private String author;
     private String bookDescription;
