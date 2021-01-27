@@ -5,4 +5,13 @@ public class User {
     
      */
 
+    private boolean isLibrerian;
+
+    public User(boolean isLibrerian) {
+        this.isLibrerian = isLibrerian;
+    }
+
+    public boolean isLibrerian() {
+        return isLibrerian;
+    }
 }
