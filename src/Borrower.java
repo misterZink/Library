@@ -1,12 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Borrower {
-
-    /*
-    Skapad av Robin Heidari, 2021-01-27
-    
-     */
+public class Borrower extends User {
 
     private String name;
     private int libraryCardNumber;
@@ -18,5 +13,13 @@ public class Borrower {
     public Borrower(String name, int libraryCardNumber) {
         this.name = name;
         this.libraryCardNumber = libraryCardNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
