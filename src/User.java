@@ -17,7 +17,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) {  // här behöver vi kolla att username är unikt
         this.username = username;
     }
 
@@ -30,7 +30,8 @@ public class User {
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return "User{" +
                 "isLibrerian=" + isLibrerian +
                 ", username='" + username + '\'' +
