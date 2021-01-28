@@ -1,6 +1,10 @@
+import java.io.Serializable;
 import java.util.Date;
 
-public class Book {
+/*we serialized it because once our program exit,
+ the book and all its contents will still exist,
+  the next time we run our program.*/
+public class Book implements Serializable {
     private String title;
     private String author;
     private String bookDescription;
@@ -11,11 +15,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author, String bookDescription, String isbn) {
+    public Book(String title, String author, String isbn, String bookDescription) {
         this.title = title;
         this.author = author;
-        this.bookDescription = bookDescription;
         this.isbn = isbn;
+        this.bookDescription = bookDescription;
     }
 
     public String getTitle() {
@@ -77,4 +81,7 @@ public class Book {
                 ", returnDate=" + returnDate +
                 '}';
     }
+
+
 }
+
