@@ -4,9 +4,6 @@ import java.util.Scanner;
 public class Main {
 //since this class contains public static void main, all the attributes must be static.
     static String fileName = null;
-    static Library lib = Library.getLibrary();
-    static Scanner in = new Scanner(System.in);
-    static Boolean running = true;
 
     /*public static void main(String[] args) {
          Library.getLibrary();
@@ -18,32 +15,10 @@ public class Main {
     }*/
  //------------
     public static void main(String[] args) {
-        while (running) {
-            System.out.println("\nEnter 0 for load a library. " + "\nEnter 1 for save and quit " + "\nEnter 2 for list all books in library" + "\nEnter 3 for add book to library");
-            int answer = in.nextInt();
-            switch (answer) {
-                case 0:
-                    System.out.println("Enter file name to load");
-                    loadScript(in.next());
-                    break;
-                case 1:
-                    saveAndQuit();
-                    break;
-                case 2:
-                    lib.getAllBooks();
 
-                    break;
-
-                case 3:
-                    addBook();
-                    break;
-            }
-
-        }
-        System.exit(0);
     }
 // add a book to our library
-    private static void addBook() {
+    /*private static void addBook() {
         String isbn;
         String title;
         String author;
@@ -101,6 +76,6 @@ public class Main {
         } else {
             System.out.println("\nThe file does not exist!");
         }
-    }
+    }*/
 
 }

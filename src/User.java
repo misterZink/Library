@@ -9,7 +9,7 @@ public class User {
         this.isLibrerian = isLibrerian;
     }
 
-    public boolean isLibrerian() {
+    public boolean isLibrarian() {
         return isLibrerian;
     }
 

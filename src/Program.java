@@ -1,8 +1,76 @@
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Program {
     private HashMap<String, User> users = new HashMap<>();   //testformat för att spara alla Users
+    private final Scanner scan = new Scanner(System.in);
+    private Library library = Library.getLibrary();
+    private User currentUser = null;
+
+    public void start() {
+        initiateTestUsers(); // skapar testanvändare
+        readUsername();
+        readPassword();
+        System.out.println("Välkommen till biblioteket");
+
+        if (currentUser.isLibrarian()) {
+            runLibrarianMenu();
+        } else {
+            runBorrowerMenu();
+        }
+    }
+
+    private void runLibrarianMenu() {
+        int userInput = 0;
+        do {
+            librarianMenuChoices();
+            userInput = readUserInt();
+            librarianMenuSwitch(userInput);
+        } while (userInput != 9);
+    }
+
+    private void runBorrowerMenu() {
+        int userInput = 0;
+        do {
+            borrowerMenuChoices();
+            userInput = readUserInt();
+            borrowerMenuSwitch(userInput);
+        } while (userInput != 9);
+    }
+
+    private void librarianMenuChoices() {
+        System.out.println("\n1. Se lista över alla böcker"
+                + "\n2."
+                + "\n3."
+                + "\n4."
+        );
+    }
+
+    private void borrowerMenuChoices() {
+        System.out.println("\n1. Se lista över alla böcker"
+                + "\n2."
+                + "\n3."
+                + "\n4."
+        );
+    }
+
+    private void librarianMenuSwitch(int choice){
+        switch (choice) {
+            case 1 -> library.getAllBooks();
+        }
+    }
+
+    private void borrowerMenuSwitch(int choice) {
+        switch (choice) {
+            case 1 -> library.getAllBooks();
+        }
+    }
+
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     private void initiateTestUsers() {
         int counter = 1;
@@ -10,52 +78,78 @@ public class Program {
         while (counter < 10) {
             users.put("user" + counter, new User());
             users.get("user" + counter).setPassword("password" + counter);
-            counter ++;
+            counter++;
         }
     }
 
-    public void start() {
-        initiateTestUsers(); // skapar testanvändare
-
-        User currentUser = null;
-        Scanner scan = new Scanner(System.in);
+    private void readUsername() {
         String usernameInput;
-        String passwordInput;
-        boolean wasFound = false;
         int loginAttempts = 0;
-
         do {
-            System.out.println("Username: ");       // Läser in username
-            usernameInput = scan.nextLine();
+            System.out.println("Username:");
+            usernameInput = readUserString();
             if (users.containsKey(usernameInput)) {
                 currentUser = users.get(usernameInput);
             }
-            loginAttempts ++;
+            loginAttempts++;
 
             if (currentUser == null && loginAttempts >= 10) {
                 System.out.println("Det verkar som att du glömt ditt användarnamn. Kontakta kundtjänst.");
                 System.exit(0); // fult avslut, vill avsluta snyggare här
-            }
-            else if (currentUser == null) System.out.println("Användarnamnet finns inte, försök igen.");
+            } else if (currentUser == null) System.out.println("Användarnamnet finns inte, försök igen.");
         } while (currentUser == null);
 
-        loginAttempts = 0;
+    }
 
+    private void readPassword() {
+        String passwordInput;
+        int loginAttempts = 0;
+        boolean wasFound = false;
         do {
-            System.out.println("Password:");        // läser in password
-            passwordInput = scan.nextLine();
+            System.out.println("Password:");
+            passwordInput = readUserString();
 
-            if (currentUser.getPassword().equals(passwordInput)) { // matchar mot currentUser's password
+            if (currentUser.getPassword().equals(passwordInput)) {
                 wasFound = true;
             }
             loginAttempts++;
             if (!wasFound && loginAttempts >= 10) {
                 System.out.println("Du verkar ha glömt ditt lösenord, kontakta kundtjänst");
                 System.exit(0); // fult avslut, vill avsluta snyggare här
-            }
-            else if (!wasFound) System.out.println("Fel lösenord, försök igen.");
+            } else if (!wasFound) System.out.println("Fel lösenord, försök igen.");
         } while (!wasFound);
+    }
 
-        System.out.println("Välkommen till biblioteket");
+    private int readUserInt() {
+        int userInput;
+        do {
+            System.out.println("Enter your choice: ");
+            while (!scan.hasNextInt()) {
+                System.out.println("Try again.");
+                scan.next();
+            }
+            userInput = scan.nextInt();
+
+        } while (userInput <= 0);
+
+        return userInput;
+    }
+
+    private String readUserString() {
+        String userInput = null;
+        do {
+            try {
+                userInput = scan.nextLine();
+            } catch (Exception e) {
+                System.out.println("Try again");
+            }
+        } while (Objects.requireNonNull(userInput).isEmpty());
+
+        return userInput;
+    }
+
+    public static void main(String[] args) {
+        Program program = new Program();
+        program.start();
     }
 }
