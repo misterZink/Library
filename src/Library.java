@@ -46,3 +46,22 @@ public class Library implements Serializable {
     }
 
 }
+
+// add a book to our library
+   /* private static void addBook() {
+        String isbn;
+        String title;
+        String author;
+        String description;
+        System.out.println("\nEnter title: ");
+        title = in.next();
+        System.out.println("\nEnter Author: ");
+        author = in.next();
+        System.out.println("\nEnter ISBN: ");
+        isbn = in.next();
+        System.out.println("\nEnter Description: ");
+        description = in.next();
+
+        Book b = new Book(title, author, isbn, description);
+        lib.addBook(b);
+    }*/
