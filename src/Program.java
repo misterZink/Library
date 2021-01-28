@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,18 +36,14 @@ public class Program {
             if (currentUser == null) System.out.println("Användaren finns inte, försök igen.");
         } while (currentUser == null);
 
-        System.out.println(currentUser);            // testutskrift
-
         do {
             System.out.println("Password:");        // läser in password
             passwordInput = scan.nextLine();
-            if (!currentUser.getPassword().equals(passwordInput)) { // matchar mot currentUser
-                System.out.println("Fel lösenord, försök igen.");
+            if (currentUser.getPassword().equals(passwordInput)) { // matchar mot currentUser
                 wasFound = true;
             }
+            if (!wasFound) System.out.println("Fel lösenord, försök igen.");
         } while (!wasFound);
-
-        System.out.println(currentUser);            // testutskrift
 
         System.out.println("Välkommen till biblioteket, " + currentUser.getUsername());
 
