@@ -8,7 +8,7 @@ public class Library implements Serializable {
     private HashMap<String, Book> allAvailableBooks; // skulle också kunna vara en ArrayList?
     private HashMap<String, Book> allBorrowedBooks;
     private HashMap<String, Borrower> allBorrowers;
-    private HashMap<String, Librerian> allLibrerians;
+    private HashMap<String, Librarian> allLibrerians;
     private static Library library = null;
 
 
@@ -19,7 +19,7 @@ public class Library implements Serializable {
         allAvailableBooks = new HashMap<String, Book>();
         allBorrowedBooks = new HashMap<String, Book>();
         allBorrowers = new HashMap<String, Borrower>();
-        allLibrerians = new HashMap<String, Librerian>();
+        allLibrerians = new HashMap<String, Librarian>();
     }
 
     //added our method addBook
@@ -46,3 +46,22 @@ public class Library implements Serializable {
     }
 
 }
+
+// add a book to our library
+   /* private static void addBook() {
+        String isbn;
+        String title;
+        String author;
+        String description;
+        System.out.println("\nEnter title: ");
+        title = in.next();
+        System.out.println("\nEnter Author: ");
+        author = in.next();
+        System.out.println("\nEnter ISBN: ");
+        isbn = in.next();
+        System.out.println("\nEnter Description: ");
+        description = in.next();
+
+        Book b = new Book(title, author, isbn, description);
+        lib.addBook(b);
+    }*/
