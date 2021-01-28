@@ -2,6 +2,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Library implements Serializable {
     private HashMap<String, Book> allBooks; // tänker att ISBN eller Titel är ID
@@ -30,19 +33,37 @@ public class Library implements Serializable {
     //here we are going to iterate through each of the book inside our list of books
 
     public void getAllBooks() {
-        for (Book book: allBooks.values()
-             ) {
+        for (Book book : allBooks.values()
+        ) {
             System.out.println(book);
         }
     }
 
 
-
-    public static Library getLibrary(){
+    public static Library getLibrary() {
         if (library == null) {
             library = new Library();
         }
         return library;
+    }
+
+    public void findBookByTitle() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the title of the book");
+        String userSearchPhrase = scanner.nextLine();
+        try {
+            Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
+            allBooks.forEach((s, book) -> {
+                Matcher matcher = pattern.matcher(book.getTitle());
+                if (matcher.find()) {
+                    System.out.println(book.getTitle());
+                }
+            });
+        } catch (Exception e) {
+
+            System.out.println("\nERROR: You can only input characters and numbers");
+        }
+
     }
 
 }
