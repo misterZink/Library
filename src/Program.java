@@ -1,10 +1,8 @@
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Program {
     private HashMap<String, User> users = new HashMap<>();   //testformat för att spara alla Users
-    private final Scanner scan = new Scanner(System.in);
     private final Library library = Library.getLibrary();
     private User currentUser = null;
 
@@ -32,7 +30,7 @@ public class Program {
         int userInput = 0;
         do {
             librarianMenuChoices();
-            userInput = readUserInt();
+            userInput = Helpers.readUserInt();
             librarianMenuSwitch(userInput);
         } while (userInput != 9);
     }
@@ -41,7 +39,7 @@ public class Program {
         int userInput = 0;
         do {
             borrowerMenuChoices();
-            userInput = readUserInt();
+            userInput = Helpers.readUserInt();
             borrowerMenuSwitch(userInput);
         } while (userInput != 9);
     }
@@ -88,7 +86,7 @@ public class Program {
         int loginAttempts = 0;
         do {
             System.out.println("Username:");
-            usernameInput = readUserString();
+            usernameInput = Helpers.readUserString();
             if (users.containsKey(usernameInput)) {
                 currentUser = users.get(usernameInput);
             }
@@ -107,7 +105,7 @@ public class Program {
         boolean wasFound = false;
         do {
             System.out.println("Password:");
-            passwordInput = readUserString();
+            passwordInput = Helpers.readUserString();
 
             if (currentUser.getPassword().equals(passwordInput)) {
                 wasFound = true;
@@ -120,29 +118,5 @@ public class Program {
         } while (!wasFound);
     }
 
-    private int readUserInt() {
-        int userInput;
-        do {
-            System.out.println("Enter your choice: ");
-            while (!scan.hasNextInt()) {
-                System.out.println("Try again.");
-                scan.next();
-            }
-            userInput = scan.nextInt();
 
-        } while (userInput <= 0);
-        return userInput;
-    }
-
-    private String readUserString() {
-        String userInput = null;
-        do {
-            try {
-                userInput = scan.nextLine();
-            } catch (Exception e) {
-                System.out.println("Try again");
-            }
-        } while (Objects.requireNonNull(userInput).isEmpty());
-        return userInput;
-    }
 }
