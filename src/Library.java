@@ -51,17 +51,19 @@ public class Library implements Serializable {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the title of the book");
         String userSearchPhrase = scanner.nextLine();
-        try {
-            Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
-            allBooks.forEach((s, book) -> {
-                Matcher matcher = pattern.matcher(book.getTitle());
-                if (matcher.find()) {
-                    System.out.println(book.getTitle());
-                }
-            });
-        } catch (Exception e) {
+        if (!userSearchPhrase.equals(".") && !userSearchPhrase.isEmpty() ) {
+            try {
+                Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
+                allBooks.forEach((s, book) -> {
+                    Matcher matcher = pattern.matcher(book.getTitle());
+                    if (matcher.find()) {
+                        System.out.println(book.getTitle());
+                    }
+                });
+            } catch (Exception e) {
 
-            System.out.println("\nERROR: You can only input characters and numbers");
+                System.out.println("\nERROR: You can only input characters and numbers");
+            }
         }
 
     }
