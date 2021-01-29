@@ -179,10 +179,4 @@ public class Program {
         System.out.println("That password works perfectly!");
         user.setPassword(password);
     }
-
-    public static void main(String[] args) {
-        Program program = new Program();
-        program.addNewUser();
-    }
-
 }
