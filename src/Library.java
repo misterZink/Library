@@ -26,7 +26,11 @@ public class Library implements Serializable {
     public void addBook(Book book) {
         allBooks.put(book.getTitle(), book);
     }
-    //implement toString method
+
+    // added our method removeBook
+    public void removeBook(Book book) {allBooks.put(book.getTitle(), book);}
+
+
     //here we are going to iterate through each of the book inside our list of books
 
     public void getAllBooks() {
@@ -45,7 +49,7 @@ public class Library implements Serializable {
         return library;
     }
 
-}
+
 
 // add a book to our library
    /* private static void addBook() {
@@ -64,4 +68,14 @@ public class Library implements Serializable {
 
         Book b = new Book(title, author, isbn, description);
         lib.addBook(b);
-    }*/
+    }
+
+//remove a book from our library
+private static void removeBook(){
+    String title;
+    System.out.println("\nEnter  books title to remove it: ");
+    title = in.next();
+    Book b = new Book(title);
+    lib.removeBook(b);
+}*/
+}
