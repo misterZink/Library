@@ -1,16 +1,18 @@
 public class User {
-    private boolean isLibrerian;
+    private boolean isLibrarian;
     private String username;
     private String password;
+    private String name;
 
     public User() {};
 
-    public User(boolean isLibrerian) {
-        this.isLibrerian = isLibrerian;
+    public User(boolean isLibrerian, String name) {
+        this.name = name;
+        this.isLibrarian = isLibrerian;
     }
 
     public boolean isLibrarian() {
-        return isLibrerian;
+        return isLibrarian;
     }
 
     public String getUsername() {
@@ -29,11 +31,15 @@ public class User {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String
     toString() {
         return "User{" +
-                "isLibrerian=" + isLibrerian +
+                "isLibrarian=" + isLibrarian +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';

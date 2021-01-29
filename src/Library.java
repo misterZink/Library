@@ -7,16 +7,16 @@ public class Library implements Serializable {
     private HashMap<String, Book> allBooks; // tänker att ISBN eller Titel är ID
     private HashMap<String, Book> allAvailableBooks; // skulle också kunna vara en ArrayList?
     private HashMap<String, Book> allBorrowedBooks;
-    private HashMap<String, Borrower> allBorrowers;
-    private HashMap<String, Librarian> allLibrerians;
+    private HashMap<Integer, Borrower> allBorrowers; // nu är key lånekortsnummer, kan behöva ändras
+    private HashMap<String, Librarian> allLibrarians;
     private static Library library = null;
 
     private Library() {
         allBooks = new HashMap<>();
         allAvailableBooks = new HashMap<String, Book>();
         allBorrowedBooks = new HashMap<String, Book>();
-        allBorrowers = new HashMap<String, Borrower>();
-        allLibrerians = new HashMap<String, Librarian>();
+        allBorrowers = new HashMap<Integer, Borrower>();
+        allLibrarians = new HashMap<String, Librarian>();
     }
 
     public void addBook(Book book) {
@@ -103,6 +103,22 @@ public class Library implements Serializable {
                 .sorted((b1, b2) -> b1.getValue().getAuthor().getLastName()
                         .compareTo(b2.getValue().getAuthor().getLastName()))
                 .forEach(System.out::println);
+    }
+
+    public void addLibrarianToLibrary(Librarian librarian){
+        allLibrarians.put(librarian.getName(), librarian);
+    }
+
+    public void addBorrowerToLibrary(Borrower borrower){
+        allBorrowers.put(borrower.getLibraryCardNumber(), borrower);
+    }
+
+    public HashMap<Integer, Borrower> getAllBorrowers() {
+        return allBorrowers;
+    }
+
+    public HashMap<String, Librarian> getAllLibrarians() {
+        return allLibrarians;
     }
 }
 
