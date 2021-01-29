@@ -79,7 +79,9 @@ public class Program {
     private void initiateTestUsers() {
         int counter = 1;
         while (counter < 10) {
-            users.put("user" + counter, new User());
+            User a = new User();;
+            users.put("user" + counter, a);
+            a.setUsername("user" + counter);
             users.get("user" + counter).setPassword("password" + counter);
             counter++;
         }
@@ -151,16 +153,16 @@ public class Program {
     }
 
     private void createUsername(User user) {
-        boolean isValid;
+        boolean isNotValid;
         String username;
         System.out.println("Enter username for new user:");
         do {
             username = Helpers.readUserString();
             String finalUsername = username;
-            isValid = users.values().stream()
+            isNotValid = users.values().stream()
                     .anyMatch(u -> u.getUsername().equals(finalUsername));
-            if (!isValid) System.out.println("Usename already exists, please try another:");
-        } while (!isValid);
+            if (isNotValid) System.out.println("Usename already exists, please try another:");
+        } while (isNotValid);
         user.setUsername(username);
     }
 
