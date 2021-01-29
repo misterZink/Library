@@ -13,7 +13,7 @@ public class Program {
         System.out.println("Welcome to the library!");
 
         // skapar en bok här som test
-        library.addBook(new Book("Hej", "Katten Katten", "34554OISG", "En bok om hej"));
+        library.addBook(new Book("Hej", new Author("Katten", "Jansson"), "34554OISG", "En bok om hej"));
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
