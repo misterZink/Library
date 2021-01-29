@@ -1,8 +1,5 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,14 +44,37 @@ public class Library implements Serializable {
         return library;
     }
 
+    public void findBookByAuthor() {
+        System.out.println("Enter the author of the book");
+        String userSearchPhrase = Helpers.readUserString();
+        userSearchPhrase = userSearchPhrase.trim();                                             // Trims all spaces in beginning of the string
+        userSearchPhrase = userSearchPhrase.replaceAll("^[\\.]+", "");        // Removes all dots in beginning of the string
+        if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
+            try {
+                System.out.println("");                                                         // Just to make the presentation of book look better
+                String finalUserSearchPhrase = userSearchPhrase.toLowerCase();
+                allBooks.entrySet().stream()
+                        .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().getFullName().toLowerCase().contains(finalUserSearchPhrase))
+                        .forEach(stringBookEntry -> {
+                            System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() + "\t\t\tAUTHOR: " + stringBookEntry.getValue().getAuthor().getFullName());
+                        });
+            } catch (Exception e) {
+                System.out.println("\nERROR: You need input more than just a special character");
+            }
+        } else {
+            System.out.println("You need to input a title");
+        }
+    }
+
+    // Does the same as findBookByAuthor() but in a different way and search by title, just did like this to try both ways.
     public void findBookByTitle() {
         System.out.println("Enter the title of the book");
         String userSearchPhrase = Helpers.readUserString();
-        userSearchPhrase = userSearchPhrase.trim();
-        userSearchPhrase = userSearchPhrase.replaceAll("^[\\.]+", "");
+        userSearchPhrase = userSearchPhrase.trim();                                             // Trims all spaces in beginning of the string
+        userSearchPhrase = userSearchPhrase.replaceAll("^[\\.]+", "");        // Removes all dots in beginning of the string
         System.out.println(userSearchPhrase);
-        if (!userSearchPhrase.isEmpty()) {
 
+        if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
             try {
                 Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
                 allBooks.forEach((s, book) -> {
@@ -64,14 +84,11 @@ public class Library implements Serializable {
                     }
                 });
             } catch (Exception e) {
-
-                System.out.println("\nERROR: You can only input characters and numbers");
+                System.out.println("\nERROR: You need input more than just a special character");
             }
         } else {
             System.out.println("You need to input a title");
         }
-
-
     }
 
     public void sortBooksByTitle() {
