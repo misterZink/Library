@@ -22,6 +22,9 @@ public class Book implements Serializable {
         this.bookDescription = bookDescription;
     }
 
+    public Book(String title) {
+    }
+
     public String getTitle() {
         return title;
     }

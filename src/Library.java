@@ -29,7 +29,13 @@ public class Library implements Serializable {
     public void addBook(Book book) {
         allBooks.put(book.getTitle(), book);
     }
-    //implement toString method
+
+    // added our method removeBook
+    public void removeBook(Book book) {
+        allBooks.put(book.getTitle(), book);
+    }
+
+
     //here we are going to iterate through each of the book inside our list of books
 
     public void getAllBooks() {
@@ -48,10 +54,13 @@ public class Library implements Serializable {
     }
 
     public void findBookByTitle() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the title of the book");
-        String userSearchPhrase = scanner.nextLine();
-        if (!userSearchPhrase.equals(".") && !userSearchPhrase.isEmpty() ) {
+        String userSearchPhrase = Helpers.readUserString();
+        userSearchPhrase = userSearchPhrase.trim();
+        userSearchPhrase = userSearchPhrase.replaceAll("^[\\.]+", "");
+        System.out.println(userSearchPhrase);
+        if (!userSearchPhrase.isEmpty()) {
+
             try {
                 Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
                 allBooks.forEach((s, book) -> {
@@ -64,7 +73,10 @@ public class Library implements Serializable {
 
                 System.out.println("\nERROR: You can only input characters and numbers");
             }
+        } else {
+            System.out.println("You need to input a title");
         }
+
 
     }
 
@@ -87,4 +99,13 @@ public class Library implements Serializable {
 
         Book b = new Book(title, author, isbn, description);
         lib.addBook(b);
-    }*/
+    }
+
+//remove a book from our library
+private static void removeBook(){
+    String title;
+    System.out.println("\nEnter  books title to remove it: ");
+    title = in.next();
+    Book b = new Book(title);
+    lib.removeBook(b);
+}*/
