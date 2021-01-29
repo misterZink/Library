@@ -42,6 +42,13 @@ public class Library implements Serializable {
         return library;
     }
 
+    public void sortBooksByTitle() {
+        allBooks.entrySet().stream()
+                .sorted((b1, b2) -> b1.getValue().getTitle()
+                        .compareTo(b2.getValue().getTitle()))
+                .forEach(System.out::println);
+    }
+
     public void sortBooksByAuthor() {
         allBooks.entrySet().stream()
                 .sorted((b1, b2) -> b1.getValue().getAuthor().getLastName()
