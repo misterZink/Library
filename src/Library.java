@@ -14,10 +14,7 @@ public class Library implements Serializable {
     private HashMap<String, Librarian> allLibrerians;
     private static Library library = null;
 
-
     private Library() {
-
-
         allBooks = new HashMap<>();
         allAvailableBooks = new HashMap<String, Book>();
         allBorrowedBooks = new HashMap<String, Book>();
@@ -25,18 +22,15 @@ public class Library implements Serializable {
         allLibrerians = new HashMap<String, Librarian>();
     }
 
-    //added our method addBook
     public void addBook(Book book) {
         allBooks.put(book.getTitle(), book);
     }
 
-    // added our method removeBook
+    //here we are going to iterate through each of the book inside our list of books
+    // Den här metoden tar inte bort böcker?
     public void removeBook(Book book) {
         allBooks.put(book.getTitle(), book);
     }
-
-
-    //here we are going to iterate through each of the book inside our list of books
 
     public void getAllBooks() {
         for (Book book : allBooks.values()
@@ -80,6 +74,19 @@ public class Library implements Serializable {
 
     }
 
+    public void sortBooksByTitle() {
+        allBooks.entrySet().stream()
+                .sorted((b1, b2) -> b1.getValue().getTitle()
+                        .compareTo(b2.getValue().getTitle()))
+                .forEach(System.out::println);
+    }
+
+    public void sortBooksByAuthor() {
+        allBooks.entrySet().stream()
+                .sorted((b1, b2) -> b1.getValue().getAuthor().getLastName()
+                        .compareTo(b2.getValue().getAuthor().getLastName()))
+                .forEach(System.out::println);
+    }
 }
 
 // add a book to our library

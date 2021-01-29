@@ -6,7 +6,7 @@ import java.util.Date;
   the next time we run our program.*/
 public class Book implements Serializable {
     private String title;
-    private String author;
+    private Author author;
     private String bookDescription;
     private boolean isAvailable;
     private String isbn;
@@ -15,7 +15,7 @@ public class Book implements Serializable {
     public Book() {
     }
 
-    public Book(String title, String author, String isbn, String bookDescription) {
+    public Book(String title, Author author, String isbn, String bookDescription) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -33,11 +33,11 @@ public class Book implements Serializable {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
