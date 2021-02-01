@@ -1,15 +1,10 @@
 public class Librarian extends User {
-    private String name;
+
+    public Librarian() {
+        super(true, "default");
+    }
 
     public Librarian(String name) {
-        this.name = name;
+        super(true, name);
     };
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
