@@ -96,7 +96,7 @@ public class Library implements Serializable {
     }
 
     public void findBookByAuthor() {
-        System.out.println("Enter the author of the book");
+        System.out.println("Enter the author of the book:");
 
         // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
         // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
@@ -109,14 +109,14 @@ public class Library implements Serializable {
                     .forEach(stringBookEntry -> System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() +
                             " AUTHOR: " + stringBookEntry.getValue().getAuthor().getFullName()));
         } else {
-            System.out.println("No author is found");
+            System.out.println("No author is found.");
         }
     }
 
     // Does the same as findBookByAuthor() but in a different way and searches books by title, just to try both ways.
     // Johan said that i could keep both methods
-    public void findBookByTitle() {
-        System.out.println("Enter the title of the book");
+    public void findBookByTitleOrISBN() {
+        System.out.println("Enter the title or ISBN of the book:");
         String userSearchPhrase = Helpers.readUserString().replaceAll("^[\\W]+", "");
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
@@ -124,13 +124,14 @@ public class Library implements Serializable {
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
             allBooks.forEach((s, book) -> {
                 Matcher matcher = pattern.matcher(book.getTitle());
-                if (matcher.find()) {
+                Matcher matcher2 = pattern.matcher(book.getIsbn());
+                if (matcher.find() || matcher2.find()) {
                     System.out.println("BOOK: " + book.getTitle());
                 }
             });
 
         } else {
-            System.out.println("You need to input a title");
+            System.out.println("Title or ISBN not found.");
         }
     }
 
