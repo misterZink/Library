@@ -23,7 +23,6 @@ public class Library implements Serializable {
         allBooks.put(book.getTitle(), book);
     }
 
-    //here we are going to iterate through each of the book inside our list of books
     // Den här metoden tar inte bort böcker?
     public void removeBook(Book book) {
         allBooks.put(book.getTitle(), book);
@@ -36,6 +35,12 @@ public class Library implements Serializable {
         }
     }
 
+    public void getAllAvaliableBooks(){
+        System.out.println("ALL AVAILABLE BOOKS:");
+        for (Book book : allAvailableBooks.values()){
+            System.out.println(book);
+        }
+    }
 
     public static Library getLibrary() {
         if (library == null) {
