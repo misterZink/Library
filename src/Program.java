@@ -69,7 +69,7 @@ public class Program {
                 + "\n3. Sort all books alphabetically by author"
                 + "\n4. List available books"
                 + "\n5. List my borrowed books"
-                + "\n6. Search for book by title"
+                + "\n6. Search for book by title or ISBN"
                 + "\n7. Search for book by author"
         );
     }
@@ -94,7 +94,7 @@ public class Program {
             case 3 -> library.sortBooksByAuthor();
             case 4 -> library.getAllAvailableBooks();
             case 5 -> System.out.println("Ska visa current users lånade böcker");
-            case 6 -> library.findBookByTitle();
+            case 6 -> library.findBookByTitleOrISBN();
             case 7 -> library.findBookByAuthor();
         }
     }
