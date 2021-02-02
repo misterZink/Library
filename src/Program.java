@@ -20,8 +20,6 @@ public class Program {
         readPassword();
         System.out.println("Welcome to the library!");
 
-        // skapar en bok här som test
-        library.addBookDirty(new Book("Hej", new Author("Katten", "Jansson"), "34554OISG", "En bok om hej"));
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
@@ -60,6 +58,7 @@ public class Program {
                 + "\n5. List all borrowers"
                 + "\n6. List all librarians"
                 + "\n7. Find borrower by name"
+                + "\n9. Exit program"
         );
     }
 
@@ -71,6 +70,7 @@ public class Program {
                 + "\n5. List my borrowed books"
                 + "\n6. Search for book by title or ISBN"
                 + "\n7. Search for book by author"
+                + "\n9. Exit program"
         );
     }
 
@@ -83,7 +83,7 @@ public class Program {
             case 5 -> library.getAllBorrowers(); // utskriftsmetod här
             case 6 -> library.getAllLibrarians(); // utskriftsmetod här
             case 7 -> System.out.println("Fixa en find borrower-metod");
-
+            case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
         }
     }
 
@@ -96,13 +96,14 @@ public class Program {
             case 5 -> System.out.println("Ska visa current users lånade böcker");
             case 6 -> library.findBookByTitleOrISBN();
             case 7 -> library.findBookByAuthor();
+            case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
         }
     }
 
     private void initiateTestUsers() {
         int counter = 1;
         while (counter < 10) {
-            User a = new User();;
+            User a = new User();
             users.put("user" + counter, a);
             a.setUsername("user" + counter);
             users.get("user" + counter).setPassword("password" + counter);

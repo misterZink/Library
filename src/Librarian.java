@@ -1,4 +1,6 @@
-public class Librarian extends User {
+import java.io.Serializable;
+
+public class Librarian extends User implements Serializable {
 
     public Librarian() {
         super(true, "default");

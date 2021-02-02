@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Author {
+public class Author implements Serializable {
 
     private String firstName;
     private String lastName;
@@ -9,7 +10,6 @@ public class Author {
     List<Book> booksByAuthor = new ArrayList<>();
 
     public Author() {
-
     }
 
 
