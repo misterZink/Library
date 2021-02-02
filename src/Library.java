@@ -23,9 +23,22 @@ public class Library implements Serializable {
         allBooks.put(book.getTitle(), book);
     }
 
-    // Den här metoden tar inte bort böcker?
-    public void removeBook(Book book) {
-        allBooks.put(book.getTitle(), book);
+    public void removeBook() {
+        System.out.println("REMOVE A BOOK FROM THE LIBRARY");
+        System.out.println("Enter title of book you want to remove:");
+        String bookTitle = Helpers.readUserString();
+        if (allBooks.containsKey(bookTitle)) {
+            if (allBooks.get(bookTitle).isAvailable()) {
+                allBooks.remove(bookTitle);
+                System.out.println(bookTitle + " has been removed from the library.");
+            }
+            else {
+                System.out.println(bookTitle + " is currently borrowed and cannot be removed from library.");
+            }
+        }
+        else {
+            System.out.println("Book was not found in library.");
+        }
     }
 
     public void getAllBooks() {
@@ -152,12 +165,4 @@ public class Library implements Serializable {
         Book b = new Book(title, author, isbn, description);
         lib.addBook(b);
     }
-
-//remove a book from our library
-private static void removeBook(){
-    String title;
-    System.out.println("\nEnter  books title to remove it: ");
-    title = in.next();
-    Book b = new Book(title);
-    lib.removeBook(b);
 }*/
