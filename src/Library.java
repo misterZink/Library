@@ -19,11 +19,29 @@ public class Library implements Serializable {
         allLibrarians = new HashMap<String, Librarian>();
     }
 
-    public void addBook(Book book) {
+    public void addBookDirty(Book book) { //For testing purposes only
         allBooks.put(book.getTitle(), book);
     }
 
-    public void removeBook() {
+    public void addBookWithDialog() {
+        System.out.println("ADD A BOOK TO THE LIBRARY");
+
+        System.out.println("Enter title: ");
+        String title = Helpers.readUserString();
+        System.out.println("Enter author's first name: ");
+        String authorFName = Helpers.readUserString();
+        System.out.println("Enter author's last name");
+        String authorLName = Helpers.readUserString();
+        System.out.println("Enter ISBN: ");
+        String isbn = Helpers.readUserString();
+        System.out.println("Enter Description: ");
+        String description = Helpers.readUserString();
+
+        Book newBook = new Book(title, new Author(authorFName, authorLName), isbn, description);
+        allBooks.put(newBook.getTitle(), newBook);
+    }
+
+    public void removeBookWithDialog() {
         System.out.println("REMOVE A BOOK FROM THE LIBRARY");
         System.out.println("Enter title of book you want to remove:");
         String bookTitle = Helpers.readUserString();
@@ -146,23 +164,3 @@ public class Library implements Serializable {
         return allLibrarians;
     }
 }
-
-// add a book to our library
-   /* private static void addBook() {
-        String isbn;
-        String title;
-        String author;
-        String description;
-        System.out.println("\nEnter title: ");
-        title = in.next();
-        System.out.println("\nEnter Author: ");
-        author = in.next();
-        System.out.println("\nEnter ISBN: ");
-        isbn = in.next();
-        System.out.println("\nEnter Description: ");
-        description = in.next();
-
-        Book b = new Book(title, author, isbn, description);
-        lib.addBook(b);
-    }
-}*/
