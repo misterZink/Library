@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +73,7 @@ public class Library implements Serializable {
         for (Book book : allAvailableBooks.values()){
             System.out.println("\n"
                     + book.getTitle() + " by "
-                    + book.getAuthor() + ", described as \""
+                    + book.getAuthor().getFullName() + ", described as \""
                     + book.getBookDescription() + "\"");
 
         }
@@ -82,7 +84,7 @@ public class Library implements Serializable {
         for (Book book : allBorrowedBooks.values()){
             System.out.println("\n"
                     + book.getTitle() + " by "
-                    + book.getAuthor() + " is borrowed by "
+                    + book.getAuthor().getFullName() + " is borrowed by "
                     + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
                     + book.getReturnDate());
         }
@@ -91,6 +93,9 @@ public class Library implements Serializable {
     public static Library getLibrary() {
         if (library == null) {
             library = new Library();
+            if (Files.exists(Paths.get("LibraryFile.ser"))) {
+                library = (Library)FileUtil.readObjectFromFile("LibraryFile.ser");
+            }
         }
         return library;
     }
@@ -103,7 +108,6 @@ public class Library implements Serializable {
         String userSearchPhrase = Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-            System.out.println("");
             allBooks.entrySet().stream()
                     .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().getFullName().toLowerCase().contains(userSearchPhrase))
                     .forEach(stringBookEntry -> System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() +
