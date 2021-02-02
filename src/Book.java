@@ -1,16 +1,14 @@
 import java.io.Serializable;
 import java.util.Date;
 
-/*we serialized it because once our program exit,
- the book and all its contents will still exist,
-  the next time we run our program.*/
 public class Book implements Serializable {
     private String title;
     private Author author;
     private String bookDescription;
-    private boolean isAvailable;
     private String isbn;
+    private boolean isAvailable;
     private Date returnDate;
+    private Borrower myBorrower = null;
 
     public Book() {
     }
@@ -71,6 +69,14 @@ public class Book implements Serializable {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public Borrower getMyBorrower() {
+        return myBorrower;
+    }
+
+    public void setMyBorrower(Borrower myBorrower) {
+        this.myBorrower = myBorrower;
     }
 
     @Override

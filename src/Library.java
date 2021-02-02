@@ -35,10 +35,25 @@ public class Library implements Serializable {
         }
     }
 
-    public void getAllAvaliableBooks(){
+    public void getAllAvailableBooks(){
         System.out.println("ALL AVAILABLE BOOKS:");
         for (Book book : allAvailableBooks.values()){
-            System.out.println(book);
+            System.out.println("\n"
+                    + book.getTitle() + " by "
+                    + book.getAuthor() + ", described as \""
+                    + book.getBookDescription() + "\"");
+
+        }
+    }
+
+    public void getAllBorrowedBooks(){
+        System.out.println("ALL BORROWED BOOKS:");
+        for (Book book : allBorrowedBooks.values()){
+            System.out.println("\n"
+                    + book.getTitle() + " by "
+                    + book.getAuthor() + " is borrowed by "
+                    + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
+                    + book.getReturnDate());
         }
     }
 
