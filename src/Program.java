@@ -9,13 +9,19 @@ public class Program {
     private User currentUser = null;
 
     public void start() {
-        initiateTestUsers(); // skapar testanvändare
+        initiateTestUsers(); // skapar Låntagare
+
+        Librarian librarian = new Librarian("Ziggi"); // skapar bibliotekarie
+        librarian.setUsername("librarian");
+        librarian.setPassword("lib");
+        users.put(librarian.getUsername(), librarian);
+
         readUsername();
         readPassword();
         System.out.println("Welcome to the library!");
 
         // skapar en bok här som test
-        library.addBook(new Book("Hej", new Author("Katten", "Jansson"), "34554OISG", "En bok om hej"));
+        library.addBookDirty(new Book("Hej", new Author("Katten", "Jansson"), "34554OISG", "En bok om hej"));
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
@@ -71,8 +77,8 @@ public class Program {
     private void librarianMenuSwitch(int choice) {
         switch (choice) {
             case 1 -> library.getAllBorrowedBooks();
-            case 2 -> System.out.println("Behöver fixa add-book metoden");//library.addBook();
-            case 3 -> library.removeBook();
+            case 2 -> library.addBookWithDialog();
+            case 3 -> library.removeBookWithDialog();
             case 4 -> addNewUser();
             case 5 -> library.getAllBorrowers(); // utskriftsmetod här
             case 6 -> library.getAllLibrarians(); // utskriftsmetod här

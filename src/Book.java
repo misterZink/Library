@@ -18,6 +18,7 @@ public class Book implements Serializable {
         this.author = author;
         this.isbn = isbn;
         this.bookDescription = bookDescription;
+        this.isAvailable = true;
     }
 
     public Book(String title) {
