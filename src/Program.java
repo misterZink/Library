@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,30 +47,49 @@ public class Program {
     }
 
     private void librarianMenuChoices() {
-        System.out.println("\n1. List all books"
-                + "\n2."
-                + "\n3."
-                + "\n4."
+        System.out.println("\n1. List all borrowed books"
+                + "\n2. Add new book to library"
+                + "\n3. Remove book from library"
+                + "\n4. Add new user"
+                + "\n5. List all borrowers"
+                + "\n6. List all librarians"
+                + "\n7. Find borrower by name"
         );
     }
 
     private void borrowerMenuChoices() {
         System.out.println("\n1. List all books"
-                + "\n2."
-                + "\n3."
-                + "\n4."
+                + "\n2. Sort all books alphabetically by title"
+                + "\n3. Sort all books alphabetically by author"
+                + "\n4. List available books"
+                + "\n5. List my borrowed books"
+                + "\n6. Search for book by title"
+                + "\n7. Search for book by author"
         );
     }
 
     private void librarianMenuSwitch(int choice) {
         switch (choice) {
-            case 1 -> library.getAllBooks();
+            case 1 -> library.getAllBorrowedBooks();
+            case 2 -> System.out.println("Behöver fixa add-book metoden");//library.addBook();
+            case 3 -> System.out.println("Behöver fixaq remove-book metoden");//library.removeBook();
+            case 4 -> addNewUser();
+            case 5 -> library.getAllBorrowers(); // utskriftsmetod här
+            case 6 -> library.getAllLibrarians(); // utskriftsmetod här
+            case 7 -> System.out.println("Fixa en find borrower-metod");
+
         }
     }
 
     private void borrowerMenuSwitch(int choice) {
         switch (choice) {
             case 1 -> library.getAllBooks();
+            case 2 -> library.sortBooksByTitle();
+            case 3 -> library.sortBooksByAuthor();
+            case 4 -> library.getAllAvailableBooks();
+            case 5 -> System.out.println("Ska visa current users lånade böcker");
+            case 6 -> library.findBookByTitle();
+            case 7 -> library.findBookByAuthor();
         }
     }
 
