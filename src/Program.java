@@ -4,9 +4,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Program {
-    private HashMap<String, User> users = new HashMap<>();   //testformat för att spara alla Users
+    private HashMap<String, User> allUsers = new HashMap<>();   //testformat för att spara alla Users
     private final Library library = Library.getLibrary();
-    private User currentUser = null;
+    private User currentUser;
+    Borrower currentBorrower;
+    Librarian currentLibrarian;
 
     public void start() {
         initiateTestUsers(); // skapar Låntagare
@@ -14,7 +16,7 @@ public class Program {
         Librarian librarian = new Librarian("Ziggi"); // skapar bibliotekarie
         librarian.setUsername("librarian");
         librarian.setPassword("lib");
-        users.put(librarian.getUsername(), librarian);
+        allUsers.put(librarian.getUsername(), librarian);
 
         readUsername();
         readPassword();
@@ -22,8 +24,10 @@ public class Program {
 
 
         if (currentUser.isLibrarian()) {
+            currentLibrarian = (Librarian) currentUser;
             runLibrarianMenu();
         } else {
+             currentBorrower = (Borrower) currentUser;
             runBorrowerMenu();
         }
     }
@@ -93,7 +97,7 @@ public class Program {
             case 2 -> library.sortBooksByTitle();
             case 3 -> library.sortBooksByAuthor();
             case 4 -> library.getAllAvailableBooks();
-            case 5 -> System.out.println("Ska visa current users lånade böcker");
+            case 5 -> currentBorrower.showMyBorrowedBooks();
             case 6 -> library.findBookByTitleOrISBN();
             case 7 -> library.findBookByAuthor();
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
@@ -103,10 +107,10 @@ public class Program {
     private void initiateTestUsers() {
         int counter = 1;
         while (counter < 10) {
-            User a = new User();
-            users.put("user" + counter, a);
+            User a = new Borrower();;
+            allUsers.put("user" + counter, a);
             a.setUsername("user" + counter);
-            users.get("user" + counter).setPassword("password" + counter);
+            allUsers.get("user" + counter).setPassword("password" + counter);
             counter++;
         }
     }
@@ -117,8 +121,8 @@ public class Program {
         do {
             System.out.println("Username:");
             usernameInput = Helpers.readUserString();
-            if (users.containsKey(usernameInput)) {
-                currentUser = users.get(usernameInput);
+            if (allUsers.containsKey(usernameInput)) {
+                currentUser = allUsers.get(usernameInput);
             }
             loginAttempts++;
 
@@ -162,13 +166,13 @@ public class Program {
             createUsername(newUser);
             createPassword(newUser);
             library.addLibrarianToLibrary((Librarian) newUser);
-            users.put(newUser.getName(), newUser);
+            allUsers.put(newUser.getName(), newUser);
         } else {
             newUser = new Borrower(nameOfNewUser, newLibraryCardNo());
             createUsername(newUser);
             createPassword(newUser);
             library.addBorrowerToLibrary((Borrower) newUser);
-            users.put(newUser.getName(), newUser);
+            allUsers.put(newUser.getName(), newUser);
         }
     }
 
@@ -183,7 +187,7 @@ public class Program {
         do {
             username = Helpers.readUserString();
             String finalUsername = username;
-            isNotValid = users.values().stream()
+            isNotValid = allUsers.values().stream()
                     .anyMatch(u -> u.getUsername().equals(finalUsername));
             if (isNotValid) System.out.println("Usename already exists, please try another:");
         } while (isNotValid);
