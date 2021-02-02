@@ -72,7 +72,7 @@ public class Program {
         switch (choice) {
             case 1 -> library.getAllBorrowedBooks();
             case 2 -> System.out.println("Behöver fixa add-book metoden");//library.addBook();
-            case 3 -> System.out.println("Behöver fixaq remove-book metoden");//library.removeBook();
+            case 3 -> library.removeBook();
             case 4 -> addNewUser();
             case 5 -> library.getAllBorrowers(); // utskriftsmetod här
             case 6 -> library.getAllLibrarians(); // utskriftsmetod här
