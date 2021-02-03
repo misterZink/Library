@@ -37,8 +37,12 @@ public class Author implements Serializable {
         booksByAuthor.add(book);
     }
 
+    public void removeFromList(Book book) {
+        booksByAuthor.remove(book);
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return firstName + " " + lastName;
     }
 

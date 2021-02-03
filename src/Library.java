@@ -15,12 +15,13 @@ public class Library implements Serializable {
 
     private Library() {
         allBooks = new HashMap<>();
-        allAvailableBooks = new HashMap<String, Book>();
-        allBorrowedBooks = new HashMap<String, Book>();
-        allBorrowers = new HashMap<Integer, Borrower>();
-        allLibrarians = new HashMap<String, Librarian>();
+        allAvailableBooks = new HashMap<>();
+        allBorrowedBooks = new HashMap<>();
+        allBorrowers = new HashMap<>();
+        allLibrarians = new HashMap<>();
     }
 
+    // for testing purposes only
     public void addBookDirty(Book book) { //For testing purposes only
         allBooks.put(book.getTitle(), book);
     }
@@ -49,14 +50,15 @@ public class Library implements Serializable {
         String bookTitle = Helpers.readUserString();
         if (allBooks.containsKey(bookTitle)) {
             if (allBooks.get(bookTitle).isAvailable()) {
+                allBooks.get(bookTitle).getAuthor().removeFromList(allBooks.get(bookTitle));
                 allBooks.remove(bookTitle);
+                allAvailableBooks.remove(bookTitle);
+
                 System.out.println(bookTitle + " has been removed from the library.");
-            }
-            else {
+            } else {
                 System.out.println(bookTitle + " is currently borrowed and cannot be removed from library.");
             }
-        }
-        else {
+        } else {
             System.out.println("Book was not found in library.");
         }
     }
@@ -68,9 +70,9 @@ public class Library implements Serializable {
         }
     }
 
-    public void getAllAvailableBooks(){
+    public void getAllAvailableBooks() {
         System.out.println("ALL AVAILABLE BOOKS:");
-        for (Book book : allAvailableBooks.values()){
+        for (Book book : allAvailableBooks.values()) {
             System.out.println("\n"
                     + book.getTitle() + " by "
                     + book.getAuthor().toString() + ", described as \""
@@ -79,9 +81,9 @@ public class Library implements Serializable {
         }
     }
 
-    public void getAllBorrowedBooks(){
+    public void getAllBorrowedBooks() {
         System.out.println("ALL BORROWED BOOKS:");
-        for (Book book : allBorrowedBooks.values()){
+        for (Book book : allBorrowedBooks.values()) {
             System.out.println("\n"
                     + book.getTitle() + " by "
                     + book.getAuthor().toString() + " is borrowed by "
@@ -94,7 +96,7 @@ public class Library implements Serializable {
         if (library == null) {
             library = new Library();
             if (Files.exists(Paths.get("LibraryFile.ser"))) {
-                library = (Library)FileUtil.readObjectFromFile("LibraryFile.ser");
+                library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             }
         }
         return library;
@@ -141,23 +143,21 @@ public class Library implements Serializable {
 
     public void sortBooksByTitle() {
         allBooks.entrySet().stream()
-                .sorted((b1, b2) -> b1.getValue().getTitle()
-                        .compareTo(b2.getValue().getTitle()))
+                .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
                 .forEach(System.out::println);
     }
 
     public void sortBooksByAuthor() {
         allBooks.entrySet().stream()
-                .sorted((b1, b2) -> b1.getValue().getAuthor().getLastName()
-                        .compareTo(b2.getValue().getAuthor().getLastName()))
+                .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
                 .forEach(System.out::println);
     }
 
-    public void addLibrarianToLibrary(Librarian librarian){
+    public void addLibrarianToLibrary(Librarian librarian) {
         allLibrarians.put(librarian.getName(), librarian);
     }
 
-    public void addBorrowerToLibrary(Borrower borrower){
+    public void addBorrowerToLibrary(Borrower borrower) {
         allBorrowers.put(borrower.getLibraryCardNumber(), borrower);
     }
 
