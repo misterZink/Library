@@ -31,7 +31,7 @@ public class Library implements Serializable {
             } else {
 
                 // Otherwise add some books to the library
-                library.initBooks();
+                library.initBooksToList();
             }
         }
         return library;
@@ -39,7 +39,7 @@ public class Library implements Serializable {
 
 
     // This method is called if the file LibraryFile does not exists. So that the library always have some books.
-    private void initBooks() {
+    private void initBooksToList() {
         Author jrTolkien = new Author("J. R. R.", "Tolkien");
         allBooks.put("The lord of the rings - The fellowship of the ring", new Book("The lord of the rings - The fellowship of the ring", jrTolkien, "9172632186", "The first book of the trilogy The lord of the rings."));
         allBooks.put("The lord of the rings - The two towers", new Book("The lord of the rings - The two towers", jrTolkien, "9789172632196", "The second book of the trilogy The lord of the rings."));
@@ -128,10 +128,7 @@ public class Library implements Serializable {
 
     public void findBookByAuthor() {
         System.out.println("Enter the author of the book:");
-
-        // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
-        // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
-        String userSearchPhrase = Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
+        String userSearchPhrase = searchPhraseInput();
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
             allBooks.entrySet().stream()
@@ -147,7 +144,7 @@ public class Library implements Serializable {
     // Johan said that i could keep both methods
     public void findBookByTitleOrISBN() {
         System.out.println("Enter the title or ISBN of the book:");
-        String userSearchPhrase = Helpers.readUserString().replaceAll("^[\\W]+", "");
+        String userSearchPhrase = searchPhraseInput();
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
 
@@ -162,6 +159,25 @@ public class Library implements Serializable {
 
         } else {
             System.out.println("Title or ISBN not found.");
+        }
+    }
+
+    public void findBorrowerByName() {
+        System.out.println("Enter the name of the borrower:");
+        String userSearchPhrase = searchPhraseInput();
+
+        if (!userSearchPhrase.isEmpty()) {
+            allBorrowers.entrySet().stream()
+                    .filter(BorrowerEntry -> BorrowerEntry.getValue().getName().equals(userSearchPhrase))
+                    .forEach(BorrowerEntry -> {
+                        System.out.println("User: " + BorrowerEntry.getValue().getName());
+                        if (BorrowerEntry.getValue().myBorrowedBooks.size() > 0) {
+                            System.out.println("Borrowed books:");
+                            BorrowerEntry.getValue().myBorrowedBooks.forEach(System.out::println);
+                        }
+                    });
+        } else {
+            System.out.println("No user found with that name.");
         }
     }
 
@@ -192,4 +208,11 @@ public class Library implements Serializable {
     public HashMap<String, Librarian> getAllLibrarians() {
         return allLibrarians;
     }
+    // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
+    // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
+
+    public String searchPhraseInput() {
+        return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
+    }
+    
 }
