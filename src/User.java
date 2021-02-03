@@ -38,10 +38,9 @@ public class User {
     @Override
     public String
     toString() {
-        return "User{" +
-                "isLibrarian=" + isLibrarian +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "Name: " + name + "\n" +
+                "is Librarian: " + isLibrarian + "\n" +
+                "Username: " + username + "\n" +
+                "Password: " + password + "\n";
     }
 }

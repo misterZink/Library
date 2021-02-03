@@ -20,7 +20,7 @@ public class Borrower extends User {
             for (Book book : myBorrowedBooks) {
                 System.out.println("\n"
                         + book.getTitle() + " by "
-                        + book.getAuthor().getFullName() + " is due back "
+                        + book.getAuthor().toString() + " is due back "
                         + book.getReturnDate());
             }
         }
