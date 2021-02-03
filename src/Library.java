@@ -1,7 +1,6 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyStore;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,22 +92,9 @@ public class Library implements Serializable {
         }
     }
 
-    public void showAllBooks() {
-        System.out.println("ALL BOOKS:");
-        HashMap<Integer, Book> allBooksWithNumbers = Helpers.createNumberedHashMap(allBooks);
-        allBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
-    }
-
-    public void showAllAvailableBooks() {
-        System.out.println("ALL AVAILABLE BOOKS:");
-        HashMap<Integer, Book> availableBooksWithNumbers = Helpers.createNumberedHashMap(allAvailableBooks);
-        availableBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
-    }
-
-    public void showAllBorrowedBooks() {
-        System.out.println("ALL BORROWED BOOKS:");
-        HashMap<Integer, Book> borrowedBooksWithNumbers = Helpers.createNumberedHashMap(allBorrowedBooks);
-        borrowedBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
+    public <T> void showBooks(HashMap<String, T> hashMap) {
+        HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
+        numberedHashMap.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
     }
 
     public void findBookByAuthor() {
@@ -119,13 +105,13 @@ public class Library implements Serializable {
         String userSearchPhrase = Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-            List<Book> test = allBooks.values().stream()
+            List<Book> foundBooks = allBooks.values().stream()
                     .filter(stringBookEntry -> stringBookEntry.getAuthor().toString().toLowerCase().contains(userSearchPhrase))
                     .collect(Collectors.toList());
-            if (test.size() > 0) {
-                HashMap<Integer, Book> test2 = Helpers.createNumberedHashMapFromList(test);
-                System.out.println("Books by " + test.get(0).getAuthor().toString());
-                test2.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+            if (foundBooks.size() > 0) {
+                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
+                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
             } else {
                 System.out.println("No author is found.");
             }
@@ -139,18 +125,24 @@ public class Library implements Serializable {
     public void findBookByTitleOrISBN() {
         System.out.println("Enter the title or ISBN of the book:");
         String userSearchPhrase = Helpers.readUserString().replaceAll("^[\\W]+", "");
+        List<Book> foundBooks = new ArrayList<>();
 
-        if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-
+        if (!userSearchPhrase.isEmpty()) { // If the string is not empty after it has been trimmed, then the code under will run
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
             allBooks.forEach((s, book) -> {
                 Matcher matcher = pattern.matcher(book.getTitle());
                 Matcher matcher2 = pattern.matcher(book.getIsbn());
                 if (matcher.find() || matcher2.find()) {
-                    System.out.println("BOOK: " + book.getTitle());
+                    foundBooks.add(book);
                 }
             });
-
+            if (foundBooks.size() > 0) {
+                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                System.out.println("\nBooks that match your search:");
+                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+            } else {
+                System.out.println("Title or ISBN not found.");
+            }
         } else {
             System.out.println("Title or ISBN not found.");
         }
@@ -181,5 +173,17 @@ public class Library implements Serializable {
 
     public HashMap<String, Librarian> getAllLibrarians() {
         return allLibrarians;
+    }
+
+    public HashMap<String, Book> getAllBooks() {
+        return allBooks;
+    }
+
+    public HashMap<String, Book> getAllAvailableBooks() {
+        return allAvailableBooks;
+    }
+
+    public HashMap<String, Book> getAllBorrowedBooks() {
+        return allBorrowedBooks;
     }
 }
