@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Borrower extends User {
+public class Borrower extends User implements Serializable {
     private int libraryCardNumber;
     List<Book> myBorrowedBooks = new ArrayList<>();
 
