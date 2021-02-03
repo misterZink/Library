@@ -168,12 +168,12 @@ public class Library implements Serializable {
 
         if (!userSearchPhrase.isEmpty()) {
             allBorrowers.entrySet().stream()
-                    .filter(BorrowerEntry -> BorrowerEntry.getValue().getName().equals(userSearchPhrase))
+                    .filter(BorrowerEntry -> BorrowerEntry.getValue().getName().toLowerCase().contains(userSearchPhrase))
                     .forEach(BorrowerEntry -> {
-                        System.out.println("User: " + BorrowerEntry.getValue().getName());
+                        System.out.println("\nUser: " + BorrowerEntry.getValue().getName());
                         if (BorrowerEntry.getValue().myBorrowedBooks.size() > 0) {
-                            System.out.println("Borrowed books:");
-                            BorrowerEntry.getValue().myBorrowedBooks.forEach(System.out::println);
+                            System.out.println("\nBorrowed books:");
+                            BorrowerEntry.getValue().myBorrowedBooks.forEach(s -> System.out.println("\nTitle: " + s.getTitle() + "\nReturn date:" + s.getReturnDate()));
                         }
                     });
         } else {
@@ -214,5 +214,5 @@ public class Library implements Serializable {
     public String searchPhraseInput() {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
-    
+
 }
