@@ -172,8 +172,8 @@ public class Library implements Serializable {
                     .forEach(BorrowerEntry -> {
                         System.out.println("\nUser: " + BorrowerEntry.getValue().getName());
                         if (BorrowerEntry.getValue().myBorrowedBooks.size() > 0) {
-                            System.out.println("\nBorrowed books:");
-                            BorrowerEntry.getValue().myBorrowedBooks.forEach(s -> System.out.println("\nTitle: " + s.getTitle() + "\nReturn date:" + s.getReturnDate()));
+                            System.out.println("Borrowed books:");
+                            BorrowerEntry.getValue().showMyBorrowedBooks();
                         }
                     });
         } else {
