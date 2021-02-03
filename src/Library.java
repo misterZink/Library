@@ -21,7 +21,41 @@ public class Library implements Serializable {
         allLibrarians = new HashMap<>();
     }
 
+    public static Library getLibrary() {
+        if (library == null) {
+            library = new Library();
+            if (Files.exists(Paths.get("LibraryFile.ser"))) {
+
+                // If file exist then read from file
+                library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
+            } else {
+
+                // Otherwise add some books to the library
+                library.initBooks();
+            }
+        }
+        return library;
+    }
+
+
+    // This method is called if the file LibraryFile does not exists. So that the library always have some books.
+    private void initBooks() {
+        Author jrTolkien = new Author("J. R. R.", "Tolkien");
+        allBooks.put("The lord of the rings - The fellowship of the ring", new Book("The lord of the rings - The fellowship of the ring", jrTolkien, "9172632186", "The first book of the trilogy The lord of the rings."));
+        allBooks.put("The lord of the rings - The two towers", new Book("The lord of the rings - The two towers", jrTolkien, "9789172632196", "The second book of the trilogy The lord of the rings."));
+        allBooks.put("The lord of the rings - The return of the king", new Book("The lord of the rings - The return of the king", jrTolkien, "9789119129710", "The third book of the trilogy The lord of the rings."));
+        allBooks.put("The Hobbit: Or There and Back Again", new Book("The Hobbit: Or There and Back Again", jrTolkien, "9789113084893", "The hobbit is a book about Bilbo and how he got the ring."));
+        allBooks.put("The Great Gatsby", new Book("The Great Gatsby", new Author("F Scott", "Fitzgerald"), "9781847496140", "Tells a story about one man's pursuit of the American dream."));
+        allBooks.put("Invisible Man", new Book("Invisible Man", new Author("Ralph", "Ellison"), "9780241970560", "Invisible Man is the story of a young black man from the South who does not fully understand racism in the world."));
+        allBooks.put("Anna Karenina", new Book("Anna Karenina", new Author("Lev", "Tolstoj"), "9789113079943", "This book is about a russian lady."));
+        allBooks.put("Hamlet", new Book("Hamlet", new Author("William", "Shakespeare"), "9780007902347", "To be, or not to be, that is the question."));
+        allBooks.put("Moby Dick", new Book("Moby Dick", new Author("Herman", "Melville"), "9780199535729", "Moby dick is a famous book."));
+        allBooks.put("To Kill A Mockingbird", new Book("To Kill A Mockingbird", new Author("Harper", "Lee"), "9780099419785", "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and, instantly successful in the United States."));
+
+    }
+
     // for testing purposes only
+
     public void addBookDirty(Book book) { //For testing purposes only
         allBooks.put(book.getTitle(), book);
     }
@@ -90,16 +124,6 @@ public class Library implements Serializable {
                     + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
                     + book.getReturnDate());
         }
-    }
-
-    public static Library getLibrary() {
-        if (library == null) {
-            library = new Library();
-            if (Files.exists(Paths.get("LibraryFile.ser"))) {
-                library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
-            }
-        }
-        return library;
     }
 
     public void findBookByAuthor() {
