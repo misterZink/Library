@@ -86,7 +86,7 @@ public class Program {
             case 4 -> addNewUser();
             case 5 -> library.getAllBorrowers(); // utskriftsmetod här
             case 6 -> library.getAllLibrarians(); // utskriftsmetod här
-            case 7 -> System.out.println("Fixa en find borrower-metod");
+            case 7 -> library.findBorrowerByName();
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
         }
     }

@@ -17,7 +17,6 @@ public class Borrower extends User implements Serializable {
 
     public void showMyBorrowedBooks() {
         if (myBorrowedBooks.size() > 0) {
-            System.out.println("MY BORROWED BOOKS");
             for (Book book : myBorrowedBooks) {
                 System.out.println("\n"
                         + book.getTitle() + " by "
