@@ -1,5 +1,4 @@
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Helpers {
     private static final Scanner scan = new Scanner(System.in);
@@ -28,5 +27,16 @@ public class Helpers {
             }
         } while (Objects.requireNonNull(userInput).isEmpty());
         return userInput;
+    }
+
+    public static <T> HashMap<Integer, T> createNumberedHashMap(HashMap<String, T> sourceHashMap) {
+        List<T> sourceList = new ArrayList<>(sourceHashMap.values());
+        HashMap<Integer, T> newHashMap = new HashMap<>();
+        Integer counter = 1;
+        for (T t: sourceList) {
+            newHashMap.put(counter, t);
+            counter ++;
+        }
+        return newHashMap;
     }
 }
