@@ -31,12 +31,12 @@ public class Helpers {
 
     public static <T> HashMap<Integer, T> createNumberedHashMap(HashMap<String, T> sourceHashMap) {
         List<T> sourceList = new ArrayList<>(sourceHashMap.values());
-        HashMap<Integer, T> newHashMap = new HashMap<>();
+        HashMap<Integer, T> numberedHashMap = new HashMap<>();
         Integer counter = 1;
         for (T t: sourceList) {
-            newHashMap.put(counter, t);
+            numberedHashMap.put(counter, t);
             counter ++;
         }
-        return newHashMap;
+        return numberedHashMap;
     }
 }
