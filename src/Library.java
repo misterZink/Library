@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Library implements Serializable {
     private HashMap<String, Book> allBooks; // tänker att ISBN eller Titel är ID
@@ -54,12 +55,6 @@ public class Library implements Serializable {
 
     }
 
-    // for testing purposes only
-
-    public void addBookDirty(Book book) { //For testing purposes only
-        allBooks.put(book.getTitle(), book);
-    }
-
     public void addBookWithDialog() {
         System.out.println("ADD A BOOK TO THE LIBRARY");
 
@@ -97,33 +92,9 @@ public class Library implements Serializable {
         }
     }
 
-    public void getAllBooks() {
-        for (Book book : allBooks.values()
-        ) {
-            System.out.println(book);
-        }
-    }
-
-    public void getAllAvailableBooks() {
-        System.out.println("ALL AVAILABLE BOOKS:");
-        for (Book book : allAvailableBooks.values()) {
-            System.out.println("\n"
-                    + book.getTitle() + " by "
-                    + book.getAuthor().toString() + ", described as \""
-                    + book.getBookDescription() + "\"");
-
-        }
-    }
-
-    public void getAllBorrowedBooks() {
-        System.out.println("ALL BORROWED BOOKS:");
-        for (Book book : allBorrowedBooks.values()) {
-            System.out.println("\n"
-                    + book.getTitle() + " by "
-                    + book.getAuthor().toString() + " is borrowed by "
-                    + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
-                    + book.getReturnDate());
-        }
+    public <T> void showBooks(HashMap<String, T> hashMap) {
+        HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
+        numberedHashMap.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
     }
 
     public void findBookByAuthor() {
@@ -131,10 +102,16 @@ public class Library implements Serializable {
         String userSearchPhrase = searchPhraseInput();
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-            allBooks.entrySet().stream()
-                    .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().toString().toLowerCase().contains(userSearchPhrase))
-                    .forEach(stringBookEntry -> System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() +
-                            " AUTHOR: " + stringBookEntry.getValue().getAuthor().toString()));
+            List<Book> foundBooks = allBooks.values().stream()
+                    .filter(stringBookEntry -> stringBookEntry.getAuthor().toString().toLowerCase().contains(userSearchPhrase))
+                    .collect(Collectors.toList());
+            if (foundBooks.size() > 0) {
+                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
+                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+            } else {
+                System.out.println("No author is found.");
+            }
         } else {
             System.out.println("No author is found.");
         }
@@ -144,21 +121,38 @@ public class Library implements Serializable {
     // Johan said that i could keep both methods
     public void findBookByTitleOrISBN() {
         System.out.println("Enter the title or ISBN of the book:");
+        List<Book> foundBooks = new ArrayList<>();
         String userSearchPhrase = searchPhraseInput();
 
-        if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-
+        if (!userSearchPhrase.isEmpty()) { // If the string is not empty after it has been trimmed, then the code under will run
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
             allBooks.forEach((s, book) -> {
                 Matcher matcher = pattern.matcher(book.getTitle());
                 Matcher matcher2 = pattern.matcher(book.getIsbn());
                 if (matcher.find() || matcher2.find()) {
-                    System.out.println("BOOK: " + book.getTitle());
+                    foundBooks.add(book);
                 }
             });
-
+            if (foundBooks.size() > 0) {
+                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                System.out.println("\nBooks that match your search:");
+                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+            } else {
+                System.out.println("Title or ISBN not found.");
+            }
         } else {
             System.out.println("Title or ISBN not found.");
+        }
+    }
+
+    public void sortBooks(String sortingOn) {
+        switch (sortingOn) {
+            case "title" -> allBooks.entrySet().stream()
+                    .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
+                    .forEach(System.out::println);
+            case "author" -> allBooks.entrySet().stream()
+                    .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
+                    .forEach(System.out::println);
         }
     }
 
@@ -181,18 +175,6 @@ public class Library implements Serializable {
         }
     }
 
-    public void sortBooksByTitle() {
-        allBooks.entrySet().stream()
-                .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
-                .forEach(System.out::println);
-    }
-
-    public void sortBooksByAuthor() {
-        allBooks.entrySet().stream()
-                .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
-                .forEach(System.out::println);
-    }
-
     public void addLibrarianToLibrary(Librarian librarian) {
         allLibrarians.put(librarian.getName(), librarian);
     }
@@ -207,6 +189,18 @@ public class Library implements Serializable {
 
     public HashMap<String, Librarian> getAllLibrarians() {
         return allLibrarians;
+    }
+
+    public HashMap<String, Book> getAllBooks() {
+        return allBooks;
+    }
+
+    public HashMap<String, Book> getAllAvailableBooks() {
+        return allAvailableBooks;
+    }
+
+    public HashMap<String, Book> getAllBorrowedBooks() {
+        return allBorrowedBooks;
     }
     // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
     // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
