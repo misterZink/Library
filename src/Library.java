@@ -1,9 +1,11 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyStore;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Library implements Serializable {
     private HashMap<String, Book> allBooks; // tänker att ISBN eller Titel är ID
@@ -54,12 +56,6 @@ public class Library implements Serializable {
 
     }
 
-    // for testing purposes only
-
-    public void addBookDirty(Book book) { //For testing purposes only
-        allBooks.put(book.getTitle(), book);
-    }
-
     public void addBookWithDialog() {
         System.out.println("ADD A BOOK TO THE LIBRARY");
 
@@ -97,33 +93,22 @@ public class Library implements Serializable {
         }
     }
 
-    public void getAllBooks() {
-        for (Book book : allBooks.values()
-        ) {
-            System.out.println(book);
-        }
+    public void showAllBooks() {
+        System.out.println("ALL BOOKS:");
+        HashMap<Integer, Book> allBooksWithNumbers = Helpers.createNumberedHashMap(allBooks);
+        allBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
     }
 
-    public void getAllAvailableBooks() {
+    public void showAllAvailableBooks() {
         System.out.println("ALL AVAILABLE BOOKS:");
-        for (Book book : allAvailableBooks.values()) {
-            System.out.println("\n"
-                    + book.getTitle() + " by "
-                    + book.getAuthor().toString() + ", described as \""
-                    + book.getBookDescription() + "\"");
-
-        }
+        HashMap<Integer, Book> availableBooksWithNumbers = Helpers.createNumberedHashMap(allAvailableBooks);
+        availableBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
     }
 
-    public void getAllBorrowedBooks() {
+    public void showAllBorrowedBooks() {
         System.out.println("ALL BORROWED BOOKS:");
-        for (Book book : allBorrowedBooks.values()) {
-            System.out.println("\n"
-                    + book.getTitle() + " by "
-                    + book.getAuthor().toString() + " is borrowed by "
-                    + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
-                    + book.getReturnDate());
-        }
+        HashMap<Integer, Book> borrowedBooksWithNumbers = Helpers.createNumberedHashMap(allBorrowedBooks);
+        borrowedBooksWithNumbers.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
     }
 
     public void findBookByAuthor() {
@@ -134,10 +119,16 @@ public class Library implements Serializable {
         String userSearchPhrase = Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
-            allBooks.entrySet().stream()
-                    .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().toString().toLowerCase().contains(userSearchPhrase))
-                    .forEach(stringBookEntry -> System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() +
-                            " AUTHOR: " + stringBookEntry.getValue().getAuthor().toString()));
+            List<Book> test = allBooks.values().stream()
+                    .filter(stringBookEntry -> stringBookEntry.getAuthor().toString().toLowerCase().contains(userSearchPhrase))
+                    .collect(Collectors.toList());
+            if (test.size() > 0) {
+                HashMap<Integer, Book> test2 = Helpers.createNumberedHashMapFromList(test);
+                System.out.println("Books by " + test.get(0).getAuthor().toString());
+                test2.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+            } else {
+                System.out.println("No author is found.");
+            }
         } else {
             System.out.println("No author is found.");
         }
@@ -165,16 +156,15 @@ public class Library implements Serializable {
         }
     }
 
-    public void sortBooksByTitle() {
-        allBooks.entrySet().stream()
-                .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
-                .forEach(System.out::println);
-    }
-
-    public void sortBooksByAuthor() {
-        allBooks.entrySet().stream()
-                .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
-                .forEach(System.out::println);
+    public void sortBooks(String sortingOn) {
+        switch (sortingOn) {
+            case "title" -> allBooks.entrySet().stream()
+                    .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
+                    .forEach(System.out::println);
+            case "author" -> allBooks.entrySet().stream()
+                    .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
+                    .forEach(System.out::println);
+        }
     }
 
     public void addLibrarianToLibrary(Librarian librarian) {

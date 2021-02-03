@@ -39,4 +39,14 @@ public class Helpers {
         }
         return numberedHashMap;
     }
+
+    public static <T> HashMap<Integer, T> createNumberedHashMapFromList(List<T> sourceList) {
+        HashMap<Integer, T> numberedHashMap = new HashMap<>();
+        Integer counter = 1;
+        for (T t: sourceList) {
+            numberedHashMap.put(counter, t);
+            counter ++;
+        }
+        return numberedHashMap;
+    }
 }

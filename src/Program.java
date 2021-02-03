@@ -80,7 +80,7 @@ public class Program {
 
     private void librarianMenuSwitch(int choice) {
         switch (choice) {
-            case 1 -> library.getAllBorrowedBooks();
+            case 1 -> library.showAllBorrowedBooks();
             case 2 -> library.addBookWithDialog();
             case 3 -> library.removeBookWithDialog();
             case 4 -> addNewUser();
@@ -93,10 +93,10 @@ public class Program {
 
     private void borrowerMenuSwitch(int choice) {
         switch (choice) {
-            case 1 -> library.getAllBooks();
-            case 2 -> library.sortBooksByTitle();
-            case 3 -> library.sortBooksByAuthor();
-            case 4 -> library.getAllAvailableBooks();
+            case 1 -> library.showAllBooks();
+            case 2 -> library.sortBooks("title");
+            case 3 -> library.sortBooks("author");
+            case 4 -> library.showAllAvailableBooks();
             case 5 -> currentBorrower.showMyBorrowedBooks();
             case 6 -> library.findBookByTitleOrISBN();
             case 7 -> library.findBookByAuthor();
