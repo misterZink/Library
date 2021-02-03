@@ -12,7 +12,6 @@ public class Author implements Serializable {
     public Author() {
     }
 
-
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,10 +25,6 @@ public class Author implements Serializable {
         return lastName;
     }
 
-    public String getFullName() {
-        return firstName + " " + lastName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -40,6 +35,11 @@ public class Author implements Serializable {
 
     public void addToList(Book book) {
         booksByAuthor.add(book);
+    }
+
+    @Override
+    public String toString(){
+        return firstName + " " + lastName;
     }
 
     public void showList() {

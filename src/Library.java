@@ -73,7 +73,7 @@ public class Library implements Serializable {
         for (Book book : allAvailableBooks.values()){
             System.out.println("\n"
                     + book.getTitle() + " by "
-                    + book.getAuthor().getFullName() + ", described as \""
+                    + book.getAuthor().toString() + ", described as \""
                     + book.getBookDescription() + "\"");
 
         }
@@ -84,7 +84,7 @@ public class Library implements Serializable {
         for (Book book : allBorrowedBooks.values()){
             System.out.println("\n"
                     + book.getTitle() + " by "
-                    + book.getAuthor().getFullName() + " is borrowed by "
+                    + book.getAuthor().toString() + " is borrowed by "
                     + book.getMyBorrower().getLibraryCardNumber() + " and is due back "
                     + book.getReturnDate());
         }
@@ -109,9 +109,9 @@ public class Library implements Serializable {
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
             allBooks.entrySet().stream()
-                    .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().getFullName().toLowerCase().contains(userSearchPhrase))
+                    .filter(stringBookEntry -> stringBookEntry.getValue().getAuthor().toString().toLowerCase().contains(userSearchPhrase))
                     .forEach(stringBookEntry -> System.out.println("BOOK: " + stringBookEntry.getValue().getTitle() +
-                            " AUTHOR: " + stringBookEntry.getValue().getAuthor().getFullName()));
+                            " AUTHOR: " + stringBookEntry.getValue().getAuthor().toString()));
         } else {
             System.out.println("No author is found.");
         }
