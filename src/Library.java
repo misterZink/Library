@@ -147,12 +147,20 @@ public class Library implements Serializable {
 
     public void sortBooks(String sortingOn) {
         switch (sortingOn) {
-            case "title" -> allBooks.entrySet().stream()
-                    .sorted(Comparator.comparing(b -> b.getValue().getTitle()))
-                    .forEach(System.out::println);
-            case "author" -> allBooks.entrySet().stream()
-                    .sorted(Comparator.comparing(b -> b.getValue().getAuthor().getLastName()))
-                    .forEach(System.out::println);
+            case "title" -> {
+                List<Book> test = allBooks.values().stream()
+                        .sorted(Comparator.comparing(Book::getTitle))
+                        .collect(Collectors.toList());
+                HashMap<Integer, Book> test2 = Helpers.createNumberedHashMapFromList(test);
+                test2.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+            }
+            case "author" -> {
+                List<Book> test3 = allBooks.values().stream()
+                        .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
+                        .collect(Collectors.toList());
+                HashMap<Integer, Book> test4 = Helpers.createNumberedHashMapFromList(test3);
+                test4.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+            }
         }
     }
 
