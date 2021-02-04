@@ -15,6 +15,10 @@ public class Borrower extends User implements Serializable {
         this.libraryCardNumber = libraryCardNumber;
     }
 
+    public void addToMyBorrowedBooks(Book book){
+        myBorrowedBooks.add(book);
+    }
+
     public void showMyBorrowedBooks() {
         if (myBorrowedBooks.size() > 0) {
             for (Book book : myBorrowedBooks) {

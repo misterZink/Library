@@ -3,7 +3,7 @@ import java.util.*;
 public class Helpers {
     private static final Scanner scan = new Scanner(System.in);
 
-    public static int readUserInt() {
+    public static int readUserInt(int min, int max) {
         int userInput;
         do {
             System.out.println("Enter your choice: ");
@@ -13,7 +13,7 @@ public class Helpers {
             }
             userInput = scan.nextInt();
 
-        } while (userInput <= 0);
+        } while (userInput <= min || userInput >= max);
         return userInput;
     }
 

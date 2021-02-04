@@ -68,8 +68,8 @@ public class Book implements Serializable {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
+    public void setReturnDate() {
+        this.returnDate = null;
     }
 
     public Borrower getMyBorrower() {
@@ -79,6 +79,8 @@ public class Book implements Serializable {
     public void setMyBorrower(Borrower myBorrower) {
         this.myBorrower = myBorrower;
     }
+
+
 
     @Override
     public String toString() {

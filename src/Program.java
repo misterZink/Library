@@ -27,7 +27,7 @@ public class Program {
             currentLibrarian = (Librarian) currentUser;
             runLibrarianMenu();
         } else {
-             currentBorrower = (Borrower) currentUser;
+            currentBorrower = (Borrower) currentUser;
             runBorrowerMenu();
         }
     }
@@ -40,16 +40,16 @@ public class Program {
         int userInput = 0;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt();
+            userInput = Helpers.readUserInt(0, 10);
             librarianMenuSwitch(userInput);
         } while (userInput != 9);
     }
 
     private void runBorrowerMenu() {
-        int userInput = 0;
+        int userInput;
         do {
             borrowerMenuChoices();
-            userInput = Helpers.readUserInt();
+            userInput = Helpers.readUserInt(0, 10);
             borrowerMenuSwitch(userInput);
         } while (userInput != 9);
     }
@@ -88,26 +88,73 @@ public class Program {
             case 6 -> library.getAllLibrarians(); // utskriftsmetod här
             case 7 -> library.findBorrowerByName();
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
+            default -> System.out.println("Your choice does not exist, try again.");
         }
     }
 
     private void borrowerMenuSwitch(int choice) {
+        HashMap<Integer, Book> numberedHashMap;
         switch (choice) {
-            case 1 -> library.showBooks(library.getAllBooks());
-            case 2 -> library.sortBooks("title");
-            case 3 -> library.sortBooks("author");
-            case 4 -> library.showBooks(library.getAllAvailableBooks());
+            case 1 -> {
+                numberedHashMap = library.showBooks(library.getAllBooks());
+                library.borrowBook(library.readWhatBookToBorrow(
+                        numberedHashMap.size() + 1),
+                        numberedHashMap,
+                        currentBorrower);
+            }
+            case 2 -> {
+                numberedHashMap = library.sortBooks("title");
+                library.borrowBook(library.readWhatBookToBorrow(
+                        numberedHashMap.size() + 1),
+                        numberedHashMap,
+                        currentBorrower);
+
+            }
+            case 3 -> {
+                numberedHashMap = library.sortBooks("author");
+                library.borrowBook(library.readWhatBookToBorrow(
+                        numberedHashMap.size() + 1),
+                        numberedHashMap,
+                        currentBorrower);
+
+            }
+            case 4 -> {
+                numberedHashMap = library.showBooks(library.getAllAvailableBooks());
+                library.borrowBook(library.readWhatBookToBorrow(
+                        numberedHashMap.size() + 1),
+                        numberedHashMap,
+                        currentBorrower);
+
+            }
             case 5 -> currentBorrower.showMyBorrowedBooks();
-            case 6 -> library.findBookByTitleOrISBN();
-            case 7 -> library.findBookByAuthor();
+            case 6 -> {
+                numberedHashMap = library.findBookByTitleOrISBN();
+                if (numberedHashMap.size() > 0) {
+                    library.borrowBook(library.readWhatBookToBorrow(
+                            numberedHashMap.size() + 1),
+                            numberedHashMap,
+                            currentBorrower);
+                }
+            }
+            case 7 -> {
+                numberedHashMap = library.findBookByAuthor();
+                if (numberedHashMap.size() > 0) {
+                    library.borrowBook(library.readWhatBookToBorrow(
+                            numberedHashMap.size() + 1),
+                            numberedHashMap,
+                            currentBorrower);
+                }
+            }
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
+            default -> System.out.println("Your choice does not exist, try again.");
         }
     }
 
     private void initiateTestUsers() {
         int counter = 1;
         while (counter < 10) {
-            User a = new Borrower();;
+            User a = new Borrower();
+            ;
             allUsers.put("user" + counter, a);
             a.setUsername("user" + counter);
             allUsers.get("user" + counter).setPassword("password" + counter);
@@ -156,7 +203,7 @@ public class Program {
         System.out.println("Would you like to create a new \n1. Librarian \n2. Borrower");
         int userInput = 0;
         while (userInput != 1 && userInput != 2) {
-            userInput = Helpers.readUserInt();
+            userInput = Helpers.readUserInt(0, 3);
         }
         System.out.println("Enter name of new user:");
         String nameOfNewUser = Helpers.readUserString();
