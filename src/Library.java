@@ -92,37 +92,41 @@ public class Library implements Serializable {
         }
     }
 
-    public <T> void showBooks(HashMap<String, T> hashMap) {
+    public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
         HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
         numberedHashMap.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
+        return numberedHashMap;
     }
 
-    public void findBookByAuthor() {
+    public HashMap<Integer, Book> findBookByAuthor() {
         System.out.println("Enter the author of the book:");
         String userSearchPhrase = searchPhraseInput();
+        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
 
         if (!userSearchPhrase.isEmpty()) {                                                      // If the string is not empty after it has been trimmed, then the code under will run
             List<Book> foundBooks = allBooks.values().stream()
                     .filter(stringBookEntry -> stringBookEntry.getAuthor().toString().toLowerCase().contains(userSearchPhrase))
                     .collect(Collectors.toList());
             if (foundBooks.size() > 0) {
-                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
-                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
             } else {
                 System.out.println("No author is found.");
             }
         } else {
             System.out.println("No author is found.");
         }
+        return numberedHashMap;
     }
 
     // Does the same as findBookByAuthor() but in a different way and searches books by title, just to try both ways.
     // Johan said that i could keep both methods
-    public void findBookByTitleOrISBN() {
+    public HashMap<Integer, Book> findBookByTitleOrISBN() {
         System.out.println("Enter the title or ISBN of the book:");
         List<Book> foundBooks = new ArrayList<>();
         String userSearchPhrase = searchPhraseInput();
+        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
 
         if (!userSearchPhrase.isEmpty()) { // If the string is not empty after it has been trimmed, then the code under will run
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
@@ -134,34 +138,37 @@ public class Library implements Serializable {
                 }
             });
             if (foundBooks.size() > 0) {
-                HashMap<Integer, Book> foundBooksWithNumbers = Helpers.createNumberedHashMapFromList(foundBooks);
+                numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("\nBooks that match your search:");
-                foundBooksWithNumbers.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             } else {
                 System.out.println("Title or ISBN not found.");
             }
         } else {
             System.out.println("Title or ISBN not found.");
         }
+        return numberedHashMap;
     }
 
-    public void sortBooks(String sortingOn) {
-        switch (sortingOn) {
+    public HashMap<Integer, Book> sortBooks(String sortBy) {
+        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
+        switch (sortBy) {
             case "title" -> {
                 List<Book> test = allBooks.values().stream()
                         .sorted(Comparator.comparing(Book::getTitle))
                         .collect(Collectors.toList());
-                HashMap<Integer, Book> test2 = Helpers.createNumberedHashMapFromList(test);
-                test2.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+                numberedHashMap = Helpers.createNumberedHashMapFromList(test);
+                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
             case "author" -> {
                 List<Book> test3 = allBooks.values().stream()
                         .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
                         .collect(Collectors.toList());
-                HashMap<Integer, Book> test4 = Helpers.createNumberedHashMapFromList(test3);
-                test4.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+                numberedHashMap = Helpers.createNumberedHashMapFromList(test3);
+                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
         }
+        return numberedHashMap;
     }
 
     public void findBorrowerByName() {
@@ -217,4 +224,21 @@ public class Library implements Serializable {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
 
+    public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower){
+        if (keyOfBook > 0) {
+            Book book = numberedHashMap.get(keyOfBook);
+            book.setAvailable(false);
+            book.setReturnDate();
+            book.setMyBorrower(currentBorrower);
+            allAvailableBooks.remove(book.getTitle());
+            allBorrowedBooks.put(book.getTitle(), book);
+            currentBorrower.addToMyBorrowedBooks(book);
+            System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
+        }
+    }
+    public int readWhatBookToBorrow(int max) {
+        System.out.println("If you want to borrow a book, enter its number. " +
+                "\nTo return to the main menu, enter 0");
+        return Helpers.readUserInt(-1, max);
+    }
 }
