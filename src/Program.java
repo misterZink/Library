@@ -5,27 +5,18 @@ import java.util.regex.Pattern;
 
 public class Program {
     private HashMap<String, User> allUsers = new HashMap<>();   //testformat för att spara alla Users
-    private Library library;
+    private Library library = Library.getLibrary();
     private User currentUser;
     Borrower currentBorrower;
     Librarian currentLibrarian;
 
     public void start() {
         initiateTestUsers(); // skapar Låntagare
-
-        Librarian librarian = new Librarian("Ziggi"); // skapar bibliotekarie
-        librarian.setUsername("librarian");
-        librarian.setPassword("lib");
-        allUsers.put(librarian.getUsername(), librarian);
-
-        library = Library.getLibrary();
-
         readUsername();
         readPassword();
         System.out.println("Welcome to the library!");
 
         if (currentUser.isLibrarian()) {
-            currentLibrarian = (Librarian) currentUser;
             runLibrarianMenu();
         } else {
             currentBorrower = (Borrower) currentUser;
@@ -38,7 +29,7 @@ public class Program {
     }
 
     private void runLibrarianMenu() {
-        int userInput = 0;
+        int userInput;
         do {
             librarianMenuChoices();
             userInput = Helpers.readUserInt(0, 10);
@@ -161,6 +152,10 @@ public class Program {
             allUsers.get("user" + counter).setPassword("password" + counter);
             counter++;
         }
+        Librarian librarian = new Librarian("Test"); // skapar bibliotekarie
+        librarian.setUsername("librarian");
+        librarian.setPassword("lib");
+        allUsers.put(librarian.getUsername(), librarian);
     }
 
     private void readUsername() {
