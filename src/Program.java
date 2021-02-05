@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -9,6 +10,7 @@ public class Program {
     private User currentUser;
     Borrower currentBorrower;
     Librarian currentLibrarian;
+    static LocalDate todaysDate = LocalDate.now();
 
     public void start() {
         initiateTestUsers(); // skapar Låntagare

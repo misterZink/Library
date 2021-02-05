@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -234,7 +235,7 @@ public class Library implements Serializable {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             book.setAvailable(false);
-            book.setReturnDate();
+            book.setReturnDate(LocalDate.now().plusDays(14));
             book.setMyBorrower(currentBorrower);
             allAvailableBooks.remove(book.getTitle());
             allBorrowedBooks.put(book.getTitle(), book);

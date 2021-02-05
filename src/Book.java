@@ -1,5 +1,5 @@
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Book implements Serializable {
     private String title;
@@ -7,7 +7,7 @@ public class Book implements Serializable {
     private String bookDescription;
     private String isbn;
     private boolean isAvailable;
-    private Date returnDate;
+    private LocalDate returnDate;
     private Borrower myBorrower = null;
 
     public Book() {
@@ -64,12 +64,13 @@ public class Book implements Serializable {
         this.isbn = isbn;
     }
 
-    public Date getReturnDate() {
+
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate() {
-        this.returnDate = null;
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
     }
 
     public Borrower getMyBorrower() {
