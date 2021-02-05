@@ -85,8 +85,8 @@ public class Program {
             case 2 -> library.addBookWithDialog();
             case 3 -> library.removeBookWithDialog();
             case 4 -> addNewUser();
-            case 5 -> library.getAllBorrowers(); // utskriftsmetod här
-            case 6 -> library.getAllLibrarians(); // utskriftsmetod här
+            case 5 -> library.showAllUsersInList(library.getAllBorrowers());
+            case 6 -> library.showAllUsersInList(library.getAllLibrarians());
             case 7 -> library.findBorrowerByName();
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> System.out.println("Your choice does not exist, try again.");
