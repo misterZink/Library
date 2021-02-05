@@ -98,6 +98,12 @@ public class Library implements Serializable {
         return numberedHashMap;
     }
 
+    public <T> void showAllUsersInList(HashMap<?, T> userList) {
+        if (userList != null && userList.size() > 0) {
+            userList.forEach((s, u) -> System.out.println(u));
+        }
+    }
+
     public HashMap<Integer, Book> findBookByAuthor() {
         System.out.println("Enter the author of the book:");
         String userSearchPhrase = searchPhraseInput();
