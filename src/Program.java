@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Program {
     private HashMap<String, User> allUsers = new HashMap<>();   //testformat för att spara alla Users
-    private final Library library = Library.getLibrary();
+    private Library library;
     private User currentUser;
     Borrower currentBorrower;
     Librarian currentLibrarian;
@@ -18,10 +18,11 @@ public class Program {
         librarian.setPassword("lib");
         allUsers.put(librarian.getUsername(), librarian);
 
+        library = Library.getLibrary();
+
         readUsername();
         readPassword();
         System.out.println("Welcome to the library!");
-
 
         if (currentUser.isLibrarian()) {
             currentLibrarian = (Librarian) currentUser;
