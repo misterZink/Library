@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Library implements Serializable {
     private static HashMap<String, Book> allBooks;
-    private HashMap<String, Book> allAvailableBooks;
+    private static HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
     private HashMap<Integer, Borrower> allBorrowers; // lånekortsnummer är key
     private HashMap<String, Librarian> allLibrarians;
@@ -29,8 +29,8 @@ public class Library implements Serializable {
                 // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
-                // Otherwise add some books to the library
                 initiateLibraryBooks();
+                initiateAvailableBooks();
             }
         }
         return library;
@@ -47,6 +47,13 @@ public class Library implements Serializable {
         }
     }
 
+    private static void initiateAvailableBooks(){
+        for (Book book : allBooks.values()) {
+            if (book.isAvailable()) {
+                allAvailableBooks.put(book.getTitle(), book);
+            }
+        }
+    }
 
     public void addBookWithDialog() {
         System.out.println("ADD A BOOK TO THE LIBRARY");
@@ -87,7 +94,7 @@ public class Library implements Serializable {
 
     public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
         HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
-        numberedHashMap.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
+        numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
         return numberedHashMap;
     }
 
