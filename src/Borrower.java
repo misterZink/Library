@@ -19,6 +19,14 @@ public class Borrower extends User implements Serializable {
         myBorrowedBooks.add(book);
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + getName() + "\n" +
+                "LibraryCardNumber: " + getLibraryCardNumber() + "\n" +
+                "Username: " + getUsername() + "\n" +
+                "Password: " + getPassword() + "\n" +  "Books borrowed: " + myBorrowedBooks.size();
+    }
+
     public void showMyBorrowedBooks() {
         if (myBorrowedBooks.size() > 0) {
             for (Book book : myBorrowedBooks) {
