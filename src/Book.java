@@ -81,8 +81,6 @@ public class Book implements Serializable {
         this.myBorrower = myBorrower;
     }
 
-
-
     @Override
     public String toString() {
         return

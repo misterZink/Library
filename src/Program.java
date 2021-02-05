@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -6,27 +5,28 @@ import java.util.regex.Pattern;
 
 public class Program {
     private HashMap<String, User> allUsers = new HashMap<>();   //testformat för att spara alla Users
-    private final Library library = Library.getLibrary();
+    private Library library = Library.getLibrary();
     private User currentUser;
     Borrower currentBorrower;
-    Librarian currentLibrarian;
-    static LocalDate todaysDate = LocalDate.now();
 
     public void start() {
-        initiateTestUsers(); // skapar Låntagare
+        initiateTestUsers();
 
-        Librarian librarian = new Librarian("Ziggi"); // skapar bibliotekarie
-        librarian.setUsername("librarian");
-        librarian.setPassword("lib");
-        allUsers.put(librarian.getUsername(), librarian);
+        boolean incorrectUsername = !readUsername();
+        if (incorrectUsername)  {
+            System.out.println("You seem to have forgotten your username or password, please contact customer service.");
+            return;
+        }
 
-        readUsername();
-        readPassword();
+        boolean incorrectPassword = !readPassword();
+        if (incorrectPassword) {
+            System.out.println("You seem to have forgotten your username or password, please contact customer service.");
+            return;
+        }
+
         System.out.println("Welcome to the library!");
 
-
         if (currentUser.isLibrarian()) {
-            currentLibrarian = (Librarian) currentUser;
             runLibrarianMenu();
         } else {
             currentBorrower = (Borrower) currentUser;
@@ -39,7 +39,7 @@ public class Program {
     }
 
     private void runLibrarianMenu() {
-        int userInput = 0;
+        int userInput;
         do {
             librarianMenuChoices();
             userInput = Helpers.readUserInt(0, 10);
@@ -97,58 +97,24 @@ public class Program {
     private void borrowerMenuSwitch(int choice) {
         HashMap<Integer, Book> numberedHashMap;
         switch (choice) {
-            case 1 -> {
-                numberedHashMap = library.showBooks(library.getAllBooks());
-                library.borrowBook(library.readWhatBookToBorrow(
-                        numberedHashMap.size() + 1),
-                        numberedHashMap,
-                        currentBorrower);
-            }
-            case 2 -> {
-                numberedHashMap = library.sortBooks("title");
-                library.borrowBook(library.readWhatBookToBorrow(
-                        numberedHashMap.size() + 1),
-                        numberedHashMap,
-                        currentBorrower);
-
-            }
-            case 3 -> {
-                numberedHashMap = library.sortBooks("author");
-                library.borrowBook(library.readWhatBookToBorrow(
-                        numberedHashMap.size() + 1),
-                        numberedHashMap,
-                        currentBorrower);
-
-            }
-            case 4 -> {
-                numberedHashMap = library.showBooks(library.getAllAvailableBooks());
-                library.borrowBook(library.readWhatBookToBorrow(
-                        numberedHashMap.size() + 1),
-                        numberedHashMap,
-                        currentBorrower);
-
-            }
+            case 1 -> callBorrowBook(library.showBooks(library.getAllBooks()));
+            case 2 -> callBorrowBook(library.sortBooks("title"));
+            case 3 -> callBorrowBook(library.sortBooks("author"));
+            case 4 -> callBorrowBook(library.showBooks(library.getAllAvailableBooks()));
             case 5 -> currentBorrower.showMyBorrowedBooks();
-            case 6 -> {
-                numberedHashMap = library.findBookByTitleOrISBN();
-                if (numberedHashMap.size() > 0) {
-                    library.borrowBook(library.readWhatBookToBorrow(
-                            numberedHashMap.size() + 1),
-                            numberedHashMap,
-                            currentBorrower);
-                }
-            }
-            case 7 -> {
-                numberedHashMap = library.findBookByAuthor();
-                if (numberedHashMap.size() > 0) {
-                    library.borrowBook(library.readWhatBookToBorrow(
-                            numberedHashMap.size() + 1),
-                            numberedHashMap,
-                            currentBorrower);
-                }
-            }
+            case 6 -> callBorrowBook(library.findBookByTitleOrISBN());
+            case 7 -> callBorrowBook(library.findBookByAuthor());
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> System.out.println("Your choice does not exist, try again.");
+        }
+    }
+
+    private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
+        if (numberedHashMap.size() > 0) {
+            library.borrowBook(library.readWhatBookToBorrow(
+                    numberedHashMap.size() + 1),
+                    numberedHashMap,
+                    currentBorrower);
         }
     }
 
@@ -162,9 +128,13 @@ public class Program {
             allUsers.get("user" + counter).setPassword("password" + counter);
             counter++;
         }
+        Librarian librarian = new Librarian("Test"); // skapar bibliotekarie
+        librarian.setUsername("librarian");
+        librarian.setPassword("lib");
+        allUsers.put(librarian.getUsername(), librarian);
     }
 
-    private void readUsername() {
+    private boolean readUsername() {
         String usernameInput;
         int loginAttempts = 0;
         do {
@@ -176,13 +146,13 @@ public class Program {
             loginAttempts++;
 
             if (currentUser == null && loginAttempts >= 10) {
-                System.out.println("You seem to have forgotten you username, please contact customer service.");
-                System.exit(0); // fult avslut, vill avsluta snyggare här
+                return false;
             } else if (currentUser == null) System.out.println("Username does not exist, please try again.");
         } while (currentUser == null);
+        return true;
     }
 
-    private void readPassword() {
+    private boolean readPassword() {
         String passwordInput;
         int loginAttempts = 0;
         boolean wasFound = false;
@@ -195,10 +165,10 @@ public class Program {
             }
             loginAttempts++;
             if (!wasFound && loginAttempts >= 10) {
-                System.out.println("You seem to have forgotten you password, please contact customer service.");
-                System.exit(0); // fult avslut, vill avsluta snyggare här
+                return false;
             } else if (!wasFound) System.out.println("Wrong password, please try again.");
         } while (!wasFound);
+        return true;
     }
 
     public void addNewUser() {
@@ -209,20 +179,23 @@ public class Program {
         }
         System.out.println("Enter name of new user:");
         String nameOfNewUser = Helpers.readUserString();
-        User newUser;
+        User newUser = userFactory(userInput);
+
+        newUser.setName(nameOfNewUser);
+        createUsername(newUser);
+        createPassword(newUser);
+
         if (userInput == 1) {
-            newUser = new Librarian(nameOfNewUser);
-            createUsername(newUser);
-            createPassword(newUser);
             library.addLibrarianToLibrary((Librarian) newUser);
-            allUsers.put(newUser.getName(), newUser);
         } else {
-            newUser = new Borrower(nameOfNewUser, newLibraryCardNo());
-            createUsername(newUser);
-            createPassword(newUser);
+            ((Borrower) newUser).setLibraryCardNumber(newLibraryCardNo());
             library.addBorrowerToLibrary((Borrower) newUser);
-            allUsers.put(newUser.getName(), newUser);
         }
+        allUsers.put(newUser.getName(), newUser);
+    }
+
+    private User userFactory(int userInput) {
+        return userInput == 1 ? new Librarian() : new Borrower();
     }
 
     private int newLibraryCardNo() {

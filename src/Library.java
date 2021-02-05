@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Library implements Serializable {
-    private HashMap<String, Book> allBooks; // tänker att ISBN eller Titel är ID
-    private HashMap<String, Book> allAvailableBooks; // skulle också kunna vara en ArrayList?
+    private static HashMap<String, Book> allBooks;
+    private static HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
-    private HashMap<Integer, Borrower> allBorrowers; // nu är key lånekortsnummer, kan behöva ändras
+    private HashMap<Integer, Borrower> allBorrowers; // lånekortsnummer är key
     private HashMap<String, Librarian> allLibrarians;
     private static Library library = null;
 
@@ -27,33 +27,33 @@ public class Library implements Serializable {
         if (library == null) {
             library = new Library();
             if (Files.exists(Paths.get("LibraryFile.ser"))) {
-
                 // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
-
-                // Otherwise add some books to the library
-                library.initBooksToList();
+                initiateLibraryBooks();
+                initiateAvailableBooks();
             }
         }
         return library;
     }
 
+    private static void initiateLibraryBooks() {
+        List<String> booksFromFile = FileUtil.readTextFromFile("src/libraryBooks.txt");
+        List<String[]> booksSplitIntoArrays = FileUtil.splitList(booksFromFile);
+        for (String[] bookArray : booksSplitIntoArrays) {
+            allBooks.put(bookArray[0],
+                    new Book(bookArray[0],
+                            new Author(bookArray[1], bookArray[2]),
+                            bookArray[3], bookArray[4]));
+        }
+    }
 
-    // This method is called if the file LibraryFile does not exists. So that the library always have some books.
-    private void initBooksToList() {
-        Author jrTolkien = new Author("J. R. R.", "Tolkien");
-        allBooks.put("The lord of the rings - The fellowship of the ring", new Book("The lord of the rings - The fellowship of the ring", jrTolkien, "9172632186", "The first book of the trilogy The lord of the rings."));
-        allBooks.put("The lord of the rings - The two towers", new Book("The lord of the rings - The two towers", jrTolkien, "9789172632196", "The second book of the trilogy The lord of the rings."));
-        allBooks.put("The lord of the rings - The return of the king", new Book("The lord of the rings - The return of the king", jrTolkien, "9789119129710", "The third book of the trilogy The lord of the rings."));
-        allBooks.put("The Hobbit: Or There and Back Again", new Book("The Hobbit: Or There and Back Again", jrTolkien, "9789113084893", "The hobbit is a book about Bilbo and how he got the ring."));
-        allBooks.put("The Great Gatsby", new Book("The Great Gatsby", new Author("F Scott", "Fitzgerald"), "9781847496140", "Tells a story about one man's pursuit of the American dream."));
-        allBooks.put("Invisible Man", new Book("Invisible Man", new Author("Ralph", "Ellison"), "9780241970560", "Invisible Man is the story of a young black man from the South who does not fully understand racism in the world."));
-        allBooks.put("Anna Karenina", new Book("Anna Karenina", new Author("Lev", "Tolstoj"), "9789113079943", "This book is about a russian lady."));
-        allBooks.put("Hamlet", new Book("Hamlet", new Author("William", "Shakespeare"), "9780007902347", "To be, or not to be, that is the question."));
-        allBooks.put("Moby Dick", new Book("Moby Dick", new Author("Herman", "Melville"), "9780199535729", "Moby dick is a famous book."));
-        allBooks.put("To Kill A Mockingbird", new Book("To Kill A Mockingbird", new Author("Harper", "Lee"), "9780099419785", "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and, instantly successful in the United States."));
-
+    private static void initiateAvailableBooks() {
+        for (Book book : allBooks.values()) {
+            if (book.isAvailable()) {
+                allAvailableBooks.put(book.getTitle(), book);
+            }
+        }
     }
 
     public void addBookWithDialog() {
@@ -93,9 +93,13 @@ public class Library implements Serializable {
         }
     }
 
+    public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
+        numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+    }
+
     public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
         HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
-        numberedHashMap.forEach((k, v) -> System.out.println("\n" + k + ". " + v.toString()));
+        printHashMap(numberedHashMap);
         return numberedHashMap;
     }
 
@@ -117,7 +121,7 @@ public class Library implements Serializable {
             if (foundBooks.size() > 0) {
                 numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+                printHashMap(numberedHashMap);
             } else {
                 System.out.println("No author is found.");
             }
@@ -147,7 +151,7 @@ public class Library implements Serializable {
             if (foundBooks.size() > 0) {
                 numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("\nBooks that match your search:");
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+                printHashMap(numberedHashMap);
             } else {
                 System.out.println("Title or ISBN not found.");
             }
@@ -158,23 +162,22 @@ public class Library implements Serializable {
     }
 
     public HashMap<Integer, Book> sortBooks(String sortBy) {
-        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
+        HashMap<Integer, Book> numberedHashMap;
+        List<Book> sorted = new ArrayList<>();
         switch (sortBy) {
             case "title" -> {
-                List<Book> test = allBooks.values().stream()
+                sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(Book::getTitle))
                         .collect(Collectors.toList());
-                numberedHashMap = Helpers.createNumberedHashMapFromList(test);
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
             case "author" -> {
-                List<Book> test3 = allBooks.values().stream()
+                sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
                         .collect(Collectors.toList());
-                numberedHashMap = Helpers.createNumberedHashMapFromList(test3);
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
         }
+        numberedHashMap = Helpers.createNumberedHashMapFromList(sorted);
+        printHashMap(numberedHashMap);
         return numberedHashMap;
     }
 
@@ -227,11 +230,11 @@ public class Library implements Serializable {
     // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
     // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
 
-    public String searchPhraseInput() {
+    private String searchPhraseInput() {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
 
-    public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower){
+    public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower) {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             book.setAvailable(false);
@@ -243,6 +246,7 @@ public class Library implements Serializable {
             System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
         }
     }
+
     public int readWhatBookToBorrow(int max) {
         System.out.println("If you want to borrow a book, enter its number. " +
                 "\nTo return to the main menu, enter 0");
