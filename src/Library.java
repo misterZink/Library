@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Library implements Serializable {
-    private static HashMap<String, Book> allBooks;
-    private static HashMap<String, Book> allAvailableBooks;
+    private HashMap<String, Book> allBooks;
+    private HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
     private HashMap<Integer, Borrower> allBorrowers; // lånekortsnummer är key
     private HashMap<String, Librarian> allLibrarians;
@@ -30,14 +30,14 @@ public class Library implements Serializable {
                 // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
-                initiateLibraryBooks();
-                initiateAvailableBooks();
+                library.initiateLibraryBooks();
+                library.initiateAvailableBooks();
             }
         }
         return library;
     }
 
-    private static void initiateLibraryBooks() {
+    private void initiateLibraryBooks() {
         List<String> booksFromFile = FileUtil.readTextFromFile("src/libraryBooks.txt");
         List<String[]> booksSplitIntoArrays = FileUtil.splitList(booksFromFile);
         for (String[] bookArray : booksSplitIntoArrays) {
@@ -48,7 +48,7 @@ public class Library implements Serializable {
         }
     }
 
-    private static void initiateAvailableBooks() {
+    private void initiateAvailableBooks() {
         for (Book book : allBooks.values()) {
             if (book.isAvailable()) {
                 allAvailableBooks.put(book.getTitle(), book);

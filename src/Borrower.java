@@ -37,7 +37,7 @@ public class Borrower extends User implements Serializable {
                         + book.getAuthor().toString() + " is due back "
                         + book.getReturnDate()
                         + " ( "
-                        + ChronoUnit.DAYS.between(Program.todaysDate, book.getReturnDate())     // Returns how many days are between now and the return date
+                        + ChronoUnit.DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
                         + " days left )");
             }
         }
