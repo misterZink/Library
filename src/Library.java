@@ -36,18 +36,18 @@ public class Library implements Serializable {
         return library;
     }
 
-    private static void initiateLibraryBooks(){
+    private static void initiateLibraryBooks() {
         List<String> booksFromFile = FileUtil.readTextFromFile("src/libraryBooks.txt");
         List<String[]> booksSplitIntoArrays = FileUtil.splitList(booksFromFile);
         for (String[] bookArray : booksSplitIntoArrays) {
-            allBooks.put(bookArray[0], 
+            allBooks.put(bookArray[0],
                     new Book(bookArray[0],
                             new Author(bookArray[1], bookArray[2]),
-                    bookArray[3], bookArray[4]));
+                            bookArray[3], bookArray[4]));
         }
     }
 
-    private static void initiateAvailableBooks(){
+    private static void initiateAvailableBooks() {
         for (Book book : allBooks.values()) {
             if (book.isAvailable()) {
                 allAvailableBooks.put(book.getTitle(), book);
@@ -92,9 +92,13 @@ public class Library implements Serializable {
         }
     }
 
+    public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
+        numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+    }
+
     public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
         HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
-        numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+        printHashMap(numberedHashMap);
         return numberedHashMap;
     }
 
@@ -116,7 +120,7 @@ public class Library implements Serializable {
             if (foundBooks.size() > 0) {
                 numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.getTitle()));
+                printHashMap(numberedHashMap);
             } else {
                 System.out.println("No author is found.");
             }
@@ -146,7 +150,7 @@ public class Library implements Serializable {
             if (foundBooks.size() > 0) {
                 numberedHashMap = Helpers.createNumberedHashMapFromList(foundBooks);
                 System.out.println("\nBooks that match your search:");
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+                printHashMap(numberedHashMap);
             } else {
                 System.out.println("Title or ISBN not found.");
             }
@@ -157,23 +161,22 @@ public class Library implements Serializable {
     }
 
     public HashMap<Integer, Book> sortBooks(String sortBy) {
-        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
+        HashMap<Integer, Book> numberedHashMap;
+        List<Book> sorted = new ArrayList<>();
         switch (sortBy) {
             case "title" -> {
-                List<Book> test = allBooks.values().stream()
+                sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(Book::getTitle))
                         .collect(Collectors.toList());
-                numberedHashMap = Helpers.createNumberedHashMapFromList(test);
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
             case "author" -> {
-                List<Book> test3 = allBooks.values().stream()
+                sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
                         .collect(Collectors.toList());
-                numberedHashMap = Helpers.createNumberedHashMapFromList(test3);
-                numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
             }
         }
+        numberedHashMap = Helpers.createNumberedHashMapFromList(sorted);
+        printHashMap(numberedHashMap);
         return numberedHashMap;
     }
 
@@ -226,11 +229,11 @@ public class Library implements Serializable {
     // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
     // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
 
-    public String searchPhraseInput() {
+    private String searchPhraseInput() {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
 
-    public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower){
+    public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower) {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             book.setAvailable(false);
@@ -242,6 +245,7 @@ public class Library implements Serializable {
             System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
         }
     }
+
     public int readWhatBookToBorrow(int max) {
         System.out.println("If you want to borrow a book, enter its number. " +
                 "\nTo return to the main menu, enter 0");

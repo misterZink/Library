@@ -8,10 +8,9 @@ public class Program {
     private Library library = Library.getLibrary();
     private User currentUser;
     Borrower currentBorrower;
-    Librarian currentLibrarian;
 
     public void start() {
-        initiateTestUsers(); // skapar Låntagare
+        initiateTestUsers();
 
         boolean incorrectUsername = !readUsername();
         if (incorrectUsername)  {

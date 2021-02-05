@@ -40,7 +40,6 @@ public class FileUtil {
         }
     }
 
-
     public static Object readObjectFromFile(String fileName) {
         Object object = null;
         try (FileInputStream fileInputStream = new FileInputStream(fileName);
