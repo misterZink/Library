@@ -1,14 +1,15 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Library implements Serializable {
-    private static HashMap<String, Book> allBooks;
-    private static HashMap<String, Book> allAvailableBooks;
+    private HashMap<String, Book> allBooks;
+    private HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
     private HashMap<Integer, Borrower> allBorrowers; // lånekortsnummer är key
     private HashMap<String, Librarian> allLibrarians;
@@ -29,14 +30,14 @@ public class Library implements Serializable {
                 // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
-                initiateLibraryBooks();
-                initiateAvailableBooks();
+                library.initiateLibraryBooks();
+                library.initiateAvailableBooks();
             }
         }
         return library;
     }
 
-    private static void initiateLibraryBooks() {
+    private void initiateLibraryBooks() {
         List<String> booksFromFile = FileUtil.readTextFromFile("src/libraryBooks.txt");
         List<String[]> booksSplitIntoArrays = FileUtil.splitList(booksFromFile);
         for (String[] bookArray : booksSplitIntoArrays) {
@@ -47,7 +48,7 @@ public class Library implements Serializable {
         }
     }
 
-    private static void initiateAvailableBooks() {
+    private void initiateAvailableBooks() {
         for (Book book : allBooks.values()) {
             if (book.isAvailable()) {
                 allAvailableBooks.put(book.getTitle(), book);
@@ -237,7 +238,7 @@ public class Library implements Serializable {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             book.setAvailable(false);
-            book.setReturnDate();
+            book.setReturnDate(LocalDate.now().plusDays(14));
             book.setMyBorrower(currentBorrower);
             allAvailableBooks.remove(book.getTitle());
             allBorrowedBooks.put(book.getTitle(), book);

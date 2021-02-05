@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,10 @@ public class Borrower extends User implements Serializable {
                 System.out.println("\n"
                         + book.getTitle() + " by "
                         + book.getAuthor().toString() + " is due back "
-                        + book.getReturnDate());
+                        + book.getReturnDate()
+                        + " ( "
+                        + ChronoUnit.DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
+                        + " days left )");
             }
         }
         else {

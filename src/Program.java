@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -8,6 +9,7 @@ public class Program {
     private Library library = Library.getLibrary();
     private User currentUser;
     Borrower currentBorrower;
+
 
     public void start() {
         initiateTestUsers();
@@ -95,6 +97,7 @@ public class Program {
     }
 
     private void borrowerMenuSwitch(int choice) {
+        HashMap<Integer, Book> numberedHashMap;
         switch (choice) {
             case 1 -> callBorrowBook(library.showBooks(library.getAllBooks()));
             case 2 -> callBorrowBook(library.sortBooks("title"));
