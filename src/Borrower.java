@@ -41,6 +41,10 @@ public class Borrower extends User implements Serializable {
         }
     }
 
+    public void setLibraryCardNumber(int libraryCardNumber) {
+        this.libraryCardNumber = libraryCardNumber;
+    }
+
     public int getLibraryCardNumber() {
         return libraryCardNumber;
     }
