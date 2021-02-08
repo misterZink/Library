@@ -44,7 +44,7 @@ public class Library implements Serializable {
             allBooks.put(bookArray[0],
                     new Book(bookArray[0],
                             new Author(bookArray[1], bookArray[2]),
-                            bookArray[3], bookArray[4]));
+                            bookArray[3], bookArray[4], bookArray[5].equals("true")));
         }
     }
 
@@ -69,8 +69,11 @@ public class Library implements Serializable {
         String isbn = Helpers.readUserString();
         System.out.println("Enter Description: ");
         String description = Helpers.readUserString();
+        System.out.println("Enter 1 to set borrow time to 4 weeks.\n" +
+                "Enter 2 to set borrow time to 2 weeks, for popular books:");
+        boolean isPopular = Helpers.readUserInt(0, 3) == 2;
 
-        Book newBook = new Book(title, new Author(authorFName, authorLName), isbn, description);
+        Book newBook = new Book(title, new Author(authorFName, authorLName), isbn, description, isPopular);
         allBooks.put(newBook.getTitle(), newBook);
     }
 
@@ -165,16 +168,12 @@ public class Library implements Serializable {
         HashMap<Integer, Book> numberedHashMap;
         List<Book> sorted = new ArrayList<>();
         switch (sortBy) {
-            case "title" -> {
-                sorted = allBooks.values().stream()
+            case "title" -> sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(Book::getTitle))
                         .collect(Collectors.toList());
-            }
-            case "author" -> {
-                sorted = allBooks.values().stream()
+            case "author" -> sorted = allBooks.values().stream()
                         .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
                         .collect(Collectors.toList());
-            }
         }
         numberedHashMap = Helpers.createNumberedHashMapFromList(sorted);
         printHashMap(numberedHashMap);
@@ -238,7 +237,7 @@ public class Library implements Serializable {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             book.setAvailable(false);
-            book.setReturnDate(LocalDate.now().plusDays(14));
+            book.setReturnDate(LocalDate.now().plusDays(book.isPopular() ? 14 : 28));
             book.setMyBorrower(currentBorrower);
             allAvailableBooks.remove(book.getTitle());
             allBorrowedBooks.put(book.getTitle(), book);

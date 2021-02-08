@@ -7,18 +7,20 @@ public class Book implements Serializable {
     private String bookDescription;
     private String isbn;
     private boolean isAvailable;
+    private boolean isPopular;
     private LocalDate returnDate;
     private Borrower myBorrower = null;
 
     public Book() {
     }
 
-    public Book(String title, Author author, String isbn, String bookDescription) {
+    public Book(String title, Author author, String isbn, String bookDescription, boolean isPopular) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.bookDescription = bookDescription;
         this.isAvailable = true;
+        this.isPopular = isPopular;
     }
 
     public Book(String title) {
@@ -64,7 +66,6 @@ public class Book implements Serializable {
         this.isbn = isbn;
     }
 
-
     public LocalDate getReturnDate() {
         return returnDate;
     }
@@ -79,6 +80,14 @@ public class Book implements Serializable {
 
     public void setMyBorrower(Borrower myBorrower) {
         this.myBorrower = myBorrower;
+    }
+
+    public boolean isPopular() {
+        return isPopular;
+    }
+
+    public void setPopular(boolean popular) {
+        isPopular = popular;
     }
 
     @Override

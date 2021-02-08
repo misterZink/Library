@@ -100,7 +100,6 @@ public class Program {
     }
 
     private void borrowerMenuSwitch(int choice) {
-        HashMap<Integer, Book> numberedHashMap;
         switch (choice) {
             case 1 -> callBorrowBook(library.showBooks(library.getAllBooks()));
             case 2 -> callBorrowBook(library.sortBooks("title"));
@@ -138,7 +137,6 @@ public class Program {
         int counter = 1;
         while (counter < 10) {
             User a = new Borrower();
-            ;
             allUsers.put("user" + counter, a);
             a.setUsername("user" + counter);
             allUsers.get("user" + counter).setPassword("password" + counter);
