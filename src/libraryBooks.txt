@@ -1,10 +1,10 @@
-The lord of the rings - The fellowship of the ring/J. R. R./Tolkien/9172632186/The first book of the trilogy The lord of the rings.
-The lord of the rings - The two towers/J. R. R./Tolkien/9789172632196/The second book of the trilogy The lord of the rings.
-The lord of the rings - The return of the king/J. R. R./Tolkien/9789119129710/The third book of the trilogy The lord of the rings.
-The Hobbit: Or There and Back Again/J. R. R./Tolkien/9789113084893/The hobbit is a book about Bilbo and how he got the ring.
-The Great Gatsby/F Scott/Fitzgerald/9781847496140/Tells a story about one man's pursuit of the American dream.
-Invisible Man/Ralph/Ellison/9780241970560/Invisible Man is the story of a young black man from the South who does not fully understand racism in the world.
-Anna Karenina/Lev/Tolstoy/9789113079943/This book is about a russian lady.
-Hamlet/William/Shakespeare/9780007902347/To be, or not to be, that is the question.
-Moby Dick/Herman/Melville/9780199535729/Moby dick is a famous book.
-To Kill A Mockingbird/Harper/Lee/9780099419785/Published in 1960 this classic was instantly successful in the United States.
+The lord of the rings - The fellowship of the ring/J. R. R./Tolkien/9172632186/The first book of the trilogy The lord of the rings./true
+The lord of the rings - The two towers/J. R. R./Tolkien/9789172632196/The second book of the trilogy The lord of the rings./false
+The lord of the rings - The return of the king/J. R. R./Tolkien/9789119129710/The third book of the trilogy The lord of the rings./false
+The Hobbit: Or There and Back Again/J. R. R./Tolkien/9789113084893/The hobbit is a book about Bilbo and how he got the ring./false
+The Great Gatsby/F Scott/Fitzgerald/9781847496140/Tells a story about one man's pursuit of the American dream./true
+Invisible Man/Ralph/Ellison/9780241970560/Invisible Man is the story of a young black man from the South who does not fully understand racism in the world./false
+Anna Karenina/Lev/Tolstoy/9789113079943/This book is about a russian lady./false
+Hamlet/William/Shakespeare/9780007902347/To be, or not to be, that is the question./false
+Moby Dick/Herman/Melville/9780199535729/Moby dick is a famous book./true
+To Kill A Mockingbird/Harper/Lee/9780099419785/Published in 1960 this classic was instantly successful in the United States./false
