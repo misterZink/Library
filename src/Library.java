@@ -236,13 +236,17 @@ public class Library implements Serializable {
     public void borrowBook(int keyOfBook, HashMap<Integer, Book> numberedHashMap, Borrower currentBorrower) {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
-            book.setAvailable(false);
-            book.setReturnDate(LocalDate.now().plusDays(book.isPopular() ? 14 : 28));
-            book.setMyBorrower(currentBorrower);
-            allAvailableBooks.remove(book.getTitle());
-            allBorrowedBooks.put(book.getTitle(), book);
-            currentBorrower.addToMyBorrowedBooks(book);
-            System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
+            if (book.isAvailable()) {
+                book.setAvailable(false);
+                book.setReturnDate(LocalDate.now().plusDays(book.isPopular() ? 14 : 28));
+                book.setMyBorrower(currentBorrower);
+                allAvailableBooks.remove(book.getTitle());
+                allBorrowedBooks.put(book.getTitle(), book);
+                currentBorrower.addToMyBorrowedBooks(book);
+                System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
+            } else {
+                System.out.println("The book is already borrowed");
+            }
         }
     }
 
@@ -251,4 +255,13 @@ public class Library implements Serializable {
                 "\nTo return to the main menu, enter 0");
         return Helpers.readUserInt(-1, max);
     }
+
+    public void removeBookFromAllBorrowedBooks(Book book) {
+        allBorrowedBooks.remove(book.getTitle());
+    }
+
+    public void addBookToAllAvailableBooks(Book book) {
+        allAvailableBooks.put(book.getTitle(), book);
+    }
+
 }
