@@ -45,13 +45,18 @@ public class Program {
         }
     }
 
-        private HashMap<String, User> loadUsers() {
-            HashMap<String, User> tempUserHashMap = new HashMap<>(library.getAllLibrarians());
-            library.getAllBorrowers().entrySet().stream().forEach(
-                    Borrower -> tempUserHashMap.put(Borrower.getValue().getUsername(), Borrower.getValue())
-            );
-            return tempUserHashMap;
-        }
+    private HashMap<String, User> loadUsers() {
+        HashMap<String, User> tempUserHashMap = new HashMap<>();
+        library.getAllLibrarians().entrySet().stream()
+                .forEach(librarian -> tempUserHashMap.put(
+                        librarian.getValue().getUsername(), librarian.getValue()));
+
+        library.getAllBorrowers().entrySet().stream()
+                .forEach(
+                borrower -> tempUserHashMap.put(borrower.getValue().getUsername(), borrower.getValue())
+        );
+        return tempUserHashMap;
+    }
 
     public User getCurrentUser() {
         return currentUser;
