@@ -11,7 +11,7 @@ public class Library implements Serializable {
     private HashMap<String, Book> allBooks;
     private HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
-    private HashMap<Integer, Borrower> allBorrowers; // lånekortsnummer är key
+    private HashMap<String, Borrower> allBorrowers; // lånekortsnummer är key
     private HashMap<String, Librarian> allLibrarians;
     private static Library library = null;
 
@@ -192,7 +192,7 @@ public class Library implements Serializable {
                         System.out.println("\nUser: " + BorrowerEntry.getValue().getName());
                         if (BorrowerEntry.getValue().myBorrowedBooks.size() > 0) {
                             System.out.println("Borrowed books:");
-                            BorrowerEntry.getValue().showMyBorrowedBooks();
+                            BorrowerEntry.getValue().showMyBorrowedBooks(true);
                         }
                     });
         } else {
@@ -205,10 +205,10 @@ public class Library implements Serializable {
     }
 
     public void addBorrowerToLibrary(Borrower borrower) {
-        allBorrowers.put(borrower.getLibraryCardNumber(), borrower);
+        allBorrowers.put(borrower.getUsername(), borrower);
     }
 
-    public HashMap<Integer, Borrower> getAllBorrowers() {
+    public HashMap<String, Borrower> getAllBorrowers() {
         return allBorrowers;
     }
 
