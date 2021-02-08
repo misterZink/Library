@@ -13,7 +13,9 @@ public class Program {
     Borrower currentBorrower;
 
     public void start() {
+        allUsers = loadUsers();
         initiateTestUsers();
+
 
         boolean incorrectUsername = !readUsername();
         if (incorrectUsername) {
@@ -42,6 +44,14 @@ public class Program {
             runBorrowerMenu();
         }
     }
+
+        private HashMap<String, User> loadUsers() {
+            HashMap<String, User> tempUserHashMap = new HashMap<>(library.getAllLibrarians());
+            library.getAllBorrowers().entrySet().stream().forEach(
+                    Borrower -> tempUserHashMap.put(Borrower.getValue().getUsername(), Borrower.getValue())
+            );
+            return tempUserHashMap;
+        }
 
     public User getCurrentUser() {
         return currentUser;
@@ -151,7 +161,7 @@ public class Program {
             }
             case 5 -> {
                 printMenuTitle("My borrowed books");
-                currentBorrower.showMyBorrowedBooks();
+                currentBorrower.showMyBorrowedBooks(false);
             }
             case 6 -> {
                 printMenuTitle("Find book by title or isbn");
