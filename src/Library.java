@@ -100,8 +100,9 @@ public class Library implements Serializable {
                         + v.toString()));
     }
 
-    public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
+    public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap, String errorMessage) {
         HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
+        if (numberedHashMap.size() == 0) System.out.println("There are no" + errorMessage + "books at the moment.");
         printHashMap(numberedHashMap);
         return numberedHashMap;
     }
