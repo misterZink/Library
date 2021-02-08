@@ -4,6 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class Borrower extends User implements Serializable {
     private int libraryCardNumber;
     List<Book> myBorrowedBooks = new ArrayList<>();
@@ -32,13 +34,16 @@ public class Borrower extends User implements Serializable {
     public void showMyBorrowedBooks() {
         if (myBorrowedBooks.size() > 0) {
             for (Book book : myBorrowedBooks) {
+                if (!LocalDate.now().isBefore(book.getReturnDate())) {
+                    System.out.println(ConsoleColor.RED_BOLD);
+                }
                 System.out.println("\n"
                         + book.getTitle() + " by "
                         + book.getAuthor().toString() + " is due back "
                         + book.getReturnDate()
                         + " ( "
-                        + ChronoUnit.DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
-                        + " days left )");
+                        + DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
+                        + " days left )" + ConsoleColor.RESET);
             }
         }
         else {
