@@ -56,28 +56,39 @@ public class Library implements Serializable {
         }
     }
 
-    public void addBookWithDialog() {
-        System.out.println("Enter title: ");
-        String title = Helpers.readUserString();
-        System.out.println("Enter author's first name: ");
-        String authorFName = Helpers.readUserString();
-        System.out.println("Enter author's last name");
-        String authorLName = Helpers.readUserString();
-        System.out.println("Enter ISBN: ");
-        String isbn = Helpers.readUserString();
-        System.out.println("Enter Description: ");
-        String description = Helpers.readUserString();
-        System.out.println("Enter 1 to set borrow time to 4 weeks.\n" +
-                "Enter 2 to set borrow time to 2 weeks, for popular books:");
-        boolean isPopular = Helpers.readUserInt(0, 3) == 2;
-
-        Book newBook = new Book(title, new Author(authorFName, authorLName), isbn, description, isPopular);
-        allBooks.put(newBook.getTitle(), newBook);
+    public void addBook() {
+        System.out.println("Enter 0 at any point to cancel and return to main menu.");
+        List<String> bookInfo = new ArrayList<>();
+        for (String s : addBookDialog()) {
+            System.out.println(s);
+            String input = Helpers.readUserString();
+            if (input.equals("0")) return;
+            bookInfo.add(input);
+        }
+        allBooks.put(bookInfo.get(0), new Book(bookInfo.get(0), new Author(bookInfo.get(1),
+                bookInfo.get(2)), bookInfo.get(3), bookInfo.get(4), bookInfo.get(5).equals("2")));
+        System.out.println(bookInfo.get(0) + " has been successfully added to the library!");
     }
 
-    public void removeBookWithDialog() {
-        System.out.println("Enter title of book you want to remove:");
+    private List<String> addBookDialog(){
+        List<String> dialog = new ArrayList<>();
+        dialog.add("Enter title: ");
+        dialog.add("Enter author's first name: ");
+        dialog.add("Enter author's last name: ");
+        dialog.add("Enter ISBN: ");
+        dialog.add("Enter Description: ");
+        dialog.add("Enter 1 to set borrow time to 4 weeks.\n" +
+                "Enter 2 to set borrow time to 2 weeks, for popular books.");
+        return dialog;
+    }
+
+
+    public void removeBook() {
+        System.out.println("Enter title of the book you want to remove:");
+        System.out.println("(or enter 0 to cancel and return to main menu.)");
         String bookTitle = Helpers.readUserString();
+        if (bookTitle.equals("0")) return;
+
         if (allBooks.containsKey(bookTitle)) {
             if (allBooks.get(bookTitle).isAvailable()) {
                 allBooks.get(bookTitle).getAuthor().removeFromList(allBooks.get(bookTitle));
@@ -95,7 +106,7 @@ public class Library implements Serializable {
 
     public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
         numberedHashMap.forEach((k, v) -> System.out.println(
-                        ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
+                ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
                         + ConsoleColor.RESET
                         + v.toString()));
     }

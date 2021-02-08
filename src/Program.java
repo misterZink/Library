@@ -104,11 +104,11 @@ public class Program {
             }
             case 2 -> {
                 printMenuTitle("Add book to library");
-                library.addBookWithDialog();
+                library.addBook();
             }
             case 3 -> {
                 printMenuTitle("Remove book from library");
-                library.removeBookWithDialog();
+                library.removeBook();
             }
             case 4 -> {
                 printMenuTitle("Add new user to system");
