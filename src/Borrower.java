@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +32,14 @@ public class Borrower extends User implements Serializable {
 
     public void showMyBorrowedBooks() {
         if (myBorrowedBooks.size() > 0) {
+            int printListnumber = 1;
             for (Book book : myBorrowedBooks) {
                 if (!LocalDate.now().isBefore(book.getReturnDate())) {
                     System.out.println(ConsoleColor.RED_BOLD);
                 }
                 System.out.println("\n"
+                        + printListnumber++
+                        + ". "
                         + book.getTitle() + " by "
                         + book.getAuthor().toString() + " is due back "
                         + book.getReturnDate()
@@ -45,10 +47,35 @@ public class Borrower extends User implements Serializable {
                         + DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
                         + " days left )" + ConsoleColor.RESET);
             }
+            readWhatBookToReturn();
         }
         else {
             System.out.println("You have no borrowed books.");
         }
+    }
+
+    private void readWhatBookToReturn() {
+        System.out.println("\nIf you want to return a book, enter its number. " +
+                "\nTo return to the main menu, enter 0");
+        int returnBookInt = Helpers.readUserInt(-1, myBorrowedBooks.size() + 1) -1;
+
+        if (returnBookInt == -1) {
+            return;
+        } else {
+            returnBook(myBorrowedBooks.get(returnBookInt), returnBookInt);
+        }
+    }
+
+    private void returnBook(Book book, int index) {
+        Library library = Library.getLibrary();
+
+        library.removeBookFromAllBorrowedBooks(book);
+        library.addBookToAllAvailableBooks(book);
+        myBorrowedBooks.remove(index);
+        book.setMyBorrower(null);
+        book.setReturnDate(null);
+        book.setAvailable(true);
+        System.out.println("You haven now returned the book: " + ConsoleColor.GREEN +  book.getTitle() + ConsoleColor.RESET);
     }
 
     public void setLibraryCardNumber(int libraryCardNumber) {
