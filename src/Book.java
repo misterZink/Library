@@ -23,31 +23,30 @@ public class Book implements Serializable {
         this.isPopular = isPopular;
     }
 
-    public Book(String title) {
+    @Override
+    public String toString() {
+        return
+                "Title: " + title + "\n" +
+                        "Author: " + author.toString() + "\n" +
+                        "Description: " + bookDescription + "\n" +
+                        "ISBN: " + isbn + "\n" +
+                        "Is available: " + isAvailable + "\n" +
+                        (returnDate != null ?
+                                "Return date: " + returnDate + "\n" : "");
+    }
+
+    public void borrowMe(Borrower currentBorrower) {
+        setAvailable(false);
+        setReturnDate(LocalDate.now().plusDays(isPopular() ? 14 : 28));
+        setMyBorrower(currentBorrower);
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Author getAuthor() {
         return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public String getBookDescription() {
-        return bookDescription;
-    }
-
-    public void setBookDescription(String bookDescription) {
-        this.bookDescription = bookDescription;
     }
 
     public boolean isAvailable() {
@@ -62,20 +61,12 @@ public class Book implements Serializable {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
     public LocalDate getReturnDate() {
         return returnDate;
     }
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
-    }
-
-    public Borrower getMyBorrower() {
-        return myBorrower;
     }
 
     public void setMyBorrower(Borrower myBorrower) {
@@ -85,23 +76,6 @@ public class Book implements Serializable {
     public boolean isPopular() {
         return isPopular;
     }
-
-    public void setPopular(boolean popular) {
-        isPopular = popular;
-    }
-
-    @Override
-    public String toString() {
-        return
-                "Title: " + title + "\n" +
-                        "Author: " + author.toString() + "\n" +
-                        "Description: " + bookDescription + "\n" +
-                        "ISBN: " + isbn + "\n" +
-                        "Is available: " + isAvailable + "\n" +
-                        (returnDate != null ?
-                                "Return date: " + returnDate + "\n" : "");
-    }
-
 
 }
 

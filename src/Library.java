@@ -11,7 +11,7 @@ public class Library implements Serializable {
     private HashMap<String, Book> allBooks;
     private HashMap<String, Book> allAvailableBooks;
     private HashMap<String, Book> allBorrowedBooks;
-    private HashMap<String, Borrower> allBorrowers; // lånekortsnummer är key
+    private HashMap<String, Borrower> allBorrowers;
     private HashMap<String, Librarian> allLibrarians;
     private static Library library = null;
 
@@ -27,7 +27,6 @@ public class Library implements Serializable {
         if (library == null) {
             library = new Library();
             if (Files.exists(Paths.get("LibraryFile.ser"))) {
-                // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
                 library.initiateLibrarianAndBorrowers();
@@ -37,7 +36,6 @@ public class Library implements Serializable {
         }
         return library;
     }
-
 
     // Creates standards users, if there is none
     private void initiateLibrarianAndBorrowers() {
@@ -57,13 +55,11 @@ public class Library implements Serializable {
         borrower3.setUsername("user3");
         borrower3.setPassword("Password3!");
 
-
         allLibrarians.put(librarian.getUsername(), librarian);
 
         allBorrowers.put(borrower1.getUsername(), borrower1);
         allBorrowers.put(borrower2.getUsername(), borrower2);
         allBorrowers.put(borrower3.getUsername(), borrower3);
-
     }
 
     private void initiateLibraryBooks() {
@@ -110,7 +106,6 @@ public class Library implements Serializable {
                 "Enter 2 to set borrow time to 2 weeks, for popular books.");
         return dialog;
     }
-
 
     public void removeBook() {
         System.out.println("Enter title of the book you want to remove:");
@@ -176,14 +171,13 @@ public class Library implements Serializable {
     }
 
     // Does the same as findBookByAuthor() but in a different way and searches books by title, just to try both ways.
-    // Johan said that i could keep both methods
     public HashMap<Integer, Book> findBookByTitleOrISBN() {
         System.out.println("Enter the title or ISBN of the book:");
         List<Book> foundBooks = new ArrayList<>();
         String userSearchPhrase = searchPhraseInput();
         HashMap<Integer, Book> numberedHashMap = new HashMap<>();
 
-        if (!userSearchPhrase.isEmpty()) { // If the string is not empty after it has been trimmed, then the code under will run
+        if (!userSearchPhrase.isEmpty()) {
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
             allBooks.forEach((s, book) -> {
                 Matcher matcher = pattern.matcher(book.getTitle());
@@ -267,9 +261,9 @@ public class Library implements Serializable {
     public HashMap<String, Book> getAllBorrowedBooks() {
         return allBorrowedBooks;
     }
+
     // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
     // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
-
     private String searchPhraseInput() {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
@@ -278,9 +272,7 @@ public class Library implements Serializable {
         if (keyOfBook > 0) {
             Book book = numberedHashMap.get(keyOfBook);
             if (book.isAvailable()) {
-                book.setAvailable(false);
-                book.setReturnDate(LocalDate.now().plusDays(book.isPopular() ? 14 : 28));
-                book.setMyBorrower(currentBorrower);
+                book.borrowMe(currentBorrower);
                 allAvailableBooks.remove(book.getTitle());
                 allBorrowedBooks.put(book.getTitle(), book);
                 currentBorrower.addToMyBorrowedBooks(book);
@@ -306,5 +298,4 @@ public class Library implements Serializable {
     public void addBookToAllAvailableBooks(Book book) {
         allAvailableBooks.put(book.getTitle(), book);
     }
-
 }

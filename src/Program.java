@@ -45,7 +45,7 @@ public class Program {
 
     private HashMap<String, User> loadUsers() {
         HashMap<String, User> tempUserHashMap = new HashMap<>();
-        library.getAllLibrarians().entrySet().stream()
+        library.getAllLibrarians().entrySet()
                 .forEach(librarian -> tempUserHashMap.put(
                         librarian.getValue().getUsername(), librarian.getValue()));
 
@@ -64,9 +64,9 @@ public class Program {
         int userInput;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt(0, 10);
+            userInput = Helpers.readUserInt(-1, 8);
             librarianMenuSwitch(userInput);
-        } while (userInput != 9);
+        } while (userInput != 0);
     }
 
     private void runBorrowerMenu() {
@@ -74,9 +74,9 @@ public class Program {
         int userInput;
         do {
             borrowerMenuChoices();
-            userInput = Helpers.readUserInt(0, 10);
+            userInput = Helpers.readUserInt(-1, 8);
             borrowerMenuSwitch(userInput);
-        } while (userInput != 9);
+        } while (userInput != 0);
     }
 
     private void librarianMenuChoices() {
@@ -89,7 +89,7 @@ public class Program {
                 + "\n5. List all borrowers"
                 + "\n6. List all librarians"
                 + "\n7. Find borrower by name"
-                + "\n9. Exit program\n"
+                + "\n0. Exit program\n"
                 + ConsoleColor.RESET
         );
     }
@@ -104,7 +104,7 @@ public class Program {
                 + "\n5. List my borrowed books"
                 + "\n6. Search for book by title or ISBN"
                 + "\n7. Search for book by author"
-                + "\n9. Exit program\n"
+                + "\n0. Exit program\n"
                 + ConsoleColor.RESET
         );
     }
