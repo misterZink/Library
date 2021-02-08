@@ -30,11 +30,40 @@ public class Library implements Serializable {
                 // If file exist then read from file
                 library = (Library) FileUtil.readObjectFromFile("LibraryFile.ser");
             } else {
+                library.initiateLibrarianAndBorrowers();
                 library.initiateLibraryBooks();
                 library.initiateAvailableBooks();
             }
         }
         return library;
+    }
+
+
+    // Creates standards users, if there is none
+    private void initiateLibrarianAndBorrowers() {
+        Librarian librarian = new Librarian("Admin");
+        librarian.setUsername("librarian");
+        librarian.setPassword("lib");
+
+        Borrower borrower1 = new Borrower("TestName", 123456);
+        borrower1.setUsername("user1");
+        borrower1.setPassword("Password1!");
+
+        Borrower borrower2 = new Borrower("TestName2", 654321);
+        borrower2.setUsername("user2");
+        borrower2.setPassword("Password2!");
+
+        Borrower borrower3 = new Borrower("TestName3", 741852);
+        borrower3.setUsername("user3");
+        borrower3.setPassword("Password3!");
+
+
+        allLibrarians.put(librarian.getUsername(), librarian);
+
+        allBorrowers.put(borrower1.getUsername(), borrower1);
+        allBorrowers.put(borrower2.getUsername(), borrower2);
+        allBorrowers.put(borrower3.getUsername(), borrower3);
+
     }
 
     private void initiateLibraryBooks() {
@@ -95,7 +124,7 @@ public class Library implements Serializable {
 
     public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
         numberedHashMap.forEach((k, v) -> System.out.println(
-                        ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
+                ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
                         + ConsoleColor.RESET
                         + v.toString()));
     }
@@ -109,7 +138,7 @@ public class Library implements Serializable {
 
     public <T> void showAllUsersInList(HashMap<?, T> userList) {
         if (userList != null && userList.size() > 0) {
-            userList.forEach((s, u) -> System.out.println(u));
+            userList.forEach((s, u) -> System.out.println(u + "\n"));
         }
     }
 

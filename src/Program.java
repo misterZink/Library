@@ -14,8 +14,6 @@ public class Program {
 
     public void start() {
         allUsers = loadUsers();
-        initiateTestUsers();
-
 
         boolean incorrectUsername = !readUsername();
         if (incorrectUsername) {
@@ -53,8 +51,8 @@ public class Program {
 
         library.getAllBorrowers().entrySet().stream()
                 .forEach(
-                borrower -> tempUserHashMap.put(borrower.getValue().getUsername(), borrower.getValue())
-        );
+                        borrower -> tempUserHashMap.put(borrower.getValue().getUsername(), borrower.getValue())
+                );
         return tempUserHashMap;
     }
 
@@ -207,21 +205,6 @@ public class Program {
             tempBookList.forEach(book -> System.out.println(book.getTitle() + ", RETURN DATE: " + book.getReturnDate()));
             System.out.println(ConsoleColor.RESET);
         }
-    }
-
-    private void initiateTestUsers() {
-        int counter = 1;
-        while (counter < 10) {
-            User a = new Borrower();
-            allUsers.put("user" + counter, a);
-            a.setUsername("user" + counter);
-            allUsers.get("user" + counter).setPassword("password" + counter);
-            counter++;
-        }
-        Librarian librarian = new Librarian("Test"); // skapar bibliotekarie
-        librarian.setUsername("librarian");
-        librarian.setPassword("lib");
-        allUsers.put(librarian.getUsername(), librarian);
     }
 
     private boolean readUsername() {
