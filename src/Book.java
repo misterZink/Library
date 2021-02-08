@@ -85,11 +85,12 @@ public class Book implements Serializable {
     public String toString() {
         return
                 "Title: " + title + "\n" +
-                "Author: " + author.toString() + "\n" +
-                "Description: " + bookDescription + "\n" +
-                "ISBN: " + isbn + "\n" +
-                "Is available: " + isAvailable + "\n" +
-                "Return date: " + returnDate + "\n";
+                        "Author: " + author.toString() + "\n" +
+                        "Description: " + bookDescription + "\n" +
+                        "ISBN: " + isbn + "\n" +
+                        "Is available: " + isAvailable + "\n" +
+                        (returnDate != null ?
+                                "Return date: " + returnDate + "\n" : "");
     }
 
 

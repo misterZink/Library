@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Program {
     private HashMap<String, User> allUsers = new HashMap<>();   //testformat för att spara alla Users
@@ -50,6 +52,7 @@ public class Program {
     }
 
     private void runBorrowerMenu() {
+        checkBooksToReturn(currentBorrower);
         int userInput;
         do {
             borrowerMenuChoices();
@@ -117,6 +120,17 @@ public class Program {
                     numberedHashMap.size() + 1),
                     numberedHashMap,
                     currentBorrower);
+        }
+    }
+
+    private  void  checkBooksToReturn(Borrower borrower) {
+        List<Book> tempBookList = borrower.myBorrowedBooks.stream()
+                .filter(book -> !LocalDate.now().isBefore(book.getReturnDate()))
+                .collect(Collectors.toList());
+        if (tempBookList.size() > 0) {
+            System.out.println(ConsoleColor.RED_BOLD + "\n\nYou have books to return:\n");
+            tempBookList.forEach(book -> System.out.println(book.getTitle() + ", RETURN DATE: " + book.getReturnDate()));
+            System.out.println(ConsoleColor.RESET);
         }
     }
 
