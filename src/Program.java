@@ -12,23 +12,28 @@ public class Program {
     private User currentUser;
     Borrower currentBorrower;
 
-
     public void start() {
         initiateTestUsers();
 
         boolean incorrectUsername = !readUsername();
-        if (incorrectUsername)  {
-            System.out.println("You seem to have forgotten your username or password, please contact customer service.");
+        if (incorrectUsername) {
+            System.out.println(ConsoleColor.RED_BOLD +
+                    "You seem to have forgotten your username or password, " +
+                    "please contact customer service."
+                    + ConsoleColor.RESET);
             return;
         }
 
         boolean incorrectPassword = !readPassword();
         if (incorrectPassword) {
-            System.out.println("You seem to have forgotten your username or password, please contact customer service.");
+            System.out.println(ConsoleColor.RED_BOLD +
+                    "You seem to have forgotten your username or password, " +
+                    "please contact customer service."
+                    + ConsoleColor.RESET);
             return;
         }
 
-        System.out.println("Welcome to the library!");
+        printMenuTitle("Welcome to the library!");
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
@@ -62,38 +67,65 @@ public class Program {
     }
 
     private void librarianMenuChoices() {
-        System.out.println("\n1. List all borrowed books"
+        System.out.println("\n"
+                + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
+                + "1. List all borrowed books"
                 + "\n2. Add new book to library"
                 + "\n3. Remove book from library"
                 + "\n4. Add new user"
                 + "\n5. List all borrowers"
                 + "\n6. List all librarians"
                 + "\n7. Find borrower by name"
-                + "\n9. Exit program"
+                + "\n9. Exit program\n"
+                + ConsoleColor.RESET
         );
     }
 
     private void borrowerMenuChoices() {
-        System.out.println("\n1. List all books"
+        System.out.println("\n"
+                + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
+                + "1. List all books"
                 + "\n2. Sort all books alphabetically by title"
                 + "\n3. Sort all books alphabetically by author"
                 + "\n4. List available books"
                 + "\n5. List my borrowed books"
                 + "\n6. Search for book by title or ISBN"
                 + "\n7. Search for book by author"
-                + "\n9. Exit program"
+                + "\n9. Exit program\n"
+                + ConsoleColor.RESET
         );
     }
 
     private void librarianMenuSwitch(int choice) {
         switch (choice) {
-            case 1 -> library.showBooks(library.getAllBorrowedBooks());
-            case 2 -> library.addBookWithDialog();
-            case 3 -> library.removeBookWithDialog();
-            case 4 -> addNewUser();
-            case 5 -> library.showAllUsersInList(library.getAllBorrowers());
-            case 6 -> library.showAllUsersInList(library.getAllLibrarians());
-            case 7 -> library.findBorrowerByName();
+            case 1 -> {
+                printMenuTitle("All borrowed books");
+                library.showBooks(library.getAllBorrowedBooks());
+            }
+            case 2 -> {
+                printMenuTitle("Add book to library");
+                library.addBookWithDialog();
+            }
+            case 3 -> {
+                printMenuTitle("Remove book from library");
+                library.removeBookWithDialog();
+            }
+            case 4 -> {
+                printMenuTitle("Add new user to system");
+                addNewUser();
+            }
+            case 5 -> {
+                printMenuTitle("Show all users");
+                library.showAllUsersInList(library.getAllBorrowers());
+            }
+            case 6 -> {
+                printMenuTitle("Show all librarians");
+                library.showAllUsersInList(library.getAllLibrarians());
+            }
+            case 7 -> {
+                printMenuTitle("Find borrower by name");
+                library.findBorrowerByName();
+            }
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> System.out.println("Your choice does not exist, try again.");
         }
@@ -101,16 +133,45 @@ public class Program {
 
     private void borrowerMenuSwitch(int choice) {
         switch (choice) {
-            case 1 -> callBorrowBook(library.showBooks(library.getAllBooks()));
-            case 2 -> callBorrowBook(library.sortBooks("title"));
-            case 3 -> callBorrowBook(library.sortBooks("author"));
-            case 4 -> callBorrowBook(library.showBooks(library.getAllAvailableBooks()));
-            case 5 -> currentBorrower.showMyBorrowedBooks();
-            case 6 -> callBorrowBook(library.findBookByTitleOrISBN());
-            case 7 -> callBorrowBook(library.findBookByAuthor());
+            case 1 -> {
+                printMenuTitle("All books");
+                callBorrowBook(library.showBooks(library.getAllBooks()));
+            }
+            case 2 -> {
+                printMenuTitle("All books sorted by author");
+                callBorrowBook(library.sortBooks("title"));
+            }
+            case 3 -> {
+                printMenuTitle("All books sorted by title");
+                callBorrowBook(library.sortBooks("author"));
+            }
+            case 4 -> {
+                printMenuTitle("All available books");
+                callBorrowBook(library.showBooks(library.getAllAvailableBooks()));
+            }
+            case 5 -> {
+                printMenuTitle("My borrowed books");
+                currentBorrower.showMyBorrowedBooks();
+            }
+            case 6 -> {
+                printMenuTitle("Find book by title or isbn");
+                callBorrowBook(library.findBookByTitleOrISBN());
+            }
+            case 7 -> {
+                printMenuTitle("Find book by author");
+                callBorrowBook(library.findBookByAuthor());
+            }
             case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
-            default -> System.out.println("Your choice does not exist, try again.");
+            default -> System.out.println(
+                    ConsoleColor.RED_BOLD + "Your choice does not exist, try again." + ConsoleColor.RESET);
         }
+    }
+
+    private void printMenuTitle(String title) {
+        System.out.println(ConsoleColor.GREEN_BOLD_BRIGHT
+                + "\t\t\t\t\t\t\t\t\t"
+                + title.toUpperCase()
+                + ConsoleColor.RESET);
     }
 
     private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
@@ -122,7 +183,7 @@ public class Program {
         }
     }
 
-    private  void  checkBooksToReturn(Borrower borrower) {
+    private void checkBooksToReturn(Borrower borrower) {
         List<Book> tempBookList = borrower.myBorrowedBooks.stream()
                 .filter(book -> !LocalDate.now().isBefore(book.getReturnDate()))
                 .collect(Collectors.toList());
