@@ -33,7 +33,7 @@ public class Program {
             return;
         }
 
-        printMenuTitle("Welcome to the library!");
+        printMenuTitle("Welcome to the library, " + currentUser.getName() + "!");
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
@@ -100,7 +100,7 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 printMenuTitle("All borrowed books");
-                library.showBooks(library.getAllBorrowedBooks());
+                library.showBooks(library.getAllBorrowedBooks(), " borrowed ");
             }
             case 2 -> {
                 printMenuTitle("Add book to library");
@@ -135,7 +135,7 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 printMenuTitle("All books");
-                callBorrowBook(library.showBooks(library.getAllBooks()));
+                callBorrowBook(library.showBooks(library.getAllBooks(), " "));
             }
             case 2 -> {
                 printMenuTitle("All books sorted by author");
@@ -147,7 +147,7 @@ public class Program {
             }
             case 4 -> {
                 printMenuTitle("All available books");
-                callBorrowBook(library.showBooks(library.getAllAvailableBooks()));
+                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), " available "));
             }
             case 5 -> {
                 printMenuTitle("My borrowed books");
