@@ -57,8 +57,6 @@ public class Library implements Serializable {
     }
 
     public void addBookWithDialog() {
-        System.out.println("ADD A BOOK TO THE LIBRARY");
-
         System.out.println("Enter title: ");
         String title = Helpers.readUserString();
         System.out.println("Enter author's first name: ");
@@ -78,7 +76,6 @@ public class Library implements Serializable {
     }
 
     public void removeBookWithDialog() {
-        System.out.println("REMOVE A BOOK FROM THE LIBRARY");
         System.out.println("Enter title of book you want to remove:");
         String bookTitle = Helpers.readUserString();
         if (allBooks.containsKey(bookTitle)) {
@@ -97,7 +94,10 @@ public class Library implements Serializable {
     }
 
     public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
-        numberedHashMap.forEach((k, v) -> System.out.println(k + ". " + v.toString()));
+        numberedHashMap.forEach((k, v) -> System.out.println(
+                        ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
+                        + ConsoleColor.RESET
+                        + v.toString()));
     }
 
     public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap) {
@@ -169,11 +169,11 @@ public class Library implements Serializable {
         List<Book> sorted = new ArrayList<>();
         switch (sortBy) {
             case "title" -> sorted = allBooks.values().stream()
-                        .sorted(Comparator.comparing(Book::getTitle))
-                        .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(Book::getTitle))
+                    .collect(Collectors.toList());
             case "author" -> sorted = allBooks.values().stream()
-                        .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
-                        .collect(Collectors.toList());
+                    .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
+                    .collect(Collectors.toList());
         }
         numberedHashMap = Helpers.createNumberedHashMapFromList(sorted);
         printHashMap(numberedHashMap);
@@ -247,8 +247,10 @@ public class Library implements Serializable {
     }
 
     public int readWhatBookToBorrow(int max) {
-        System.out.println("If you want to borrow a book, enter its number. " +
-                "\nTo return to the main menu, enter 0");
+        System.out.println(ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
+                + "If you want to borrow a book, enter its number. "
+                + "\nTo return to the main menu, enter 0.\n"
+                + ConsoleColor.RESET);
         return Helpers.readUserInt(-1, max);
     }
 }
