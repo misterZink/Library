@@ -83,12 +83,14 @@ public class Program {
         System.out.println("\n"
                 + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
                 + "1. List all borrowed books"
-                + "\n2. Add new book to library"
-                + "\n3. Remove book from library"
-                + "\n4. Add new user"
-                + "\n5. List all borrowers"
-                + "\n6. List all librarians"
-                + "\n7. Find borrower by name"
+                + "\n2. List all books"
+                + "\n3. List all available books"
+                + "\n4. Add new book to library"
+                + "\n5. Remove book from library"
+                + "\n6. Add new user"
+                + "\n7. List all borrowers"
+                + "\n8. List all librarians"
+                + "\n9. Find borrower by name"
                 + "\n0. Exit program\n"
                 + ConsoleColor.RESET
         );
@@ -115,27 +117,29 @@ public class Program {
                 printMenuTitle("All borrowed books");
                 library.showBooks(library.getAllBorrowedBooks(), " borrowed ");
             }
-            case 2 -> {
+            case 2 -> library.showBooks(library.getAllBooks(), " ");
+            case 3 -> library.showBooks(library.getAllAvailableBooks(), " available ");
+            case 4 -> {
                 printMenuTitle("Add book to library");
                 library.addBook();
             }
-            case 3 -> {
+            case 5 -> {
                 printMenuTitle("Remove book from library");
                 library.removeBook();
             }
-            case 4 -> {
+            case 6 -> {
                 printMenuTitle("Add new user to system");
                 addNewUser();
             }
-            case 5 -> {
+            case 7 -> {
                 printMenuTitle("Show all users");
                 library.showAllUsersInList(library.getAllBorrowers());
             }
-            case 6 -> {
+            case 8 -> {
                 printMenuTitle("Show all librarians");
                 library.showAllUsersInList(library.getAllLibrarians());
             }
-            case 7 -> {
+            case 9 -> {
                 printMenuTitle("Find borrower by name");
                 library.findBorrowerByName();
             }

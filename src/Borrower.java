@@ -27,7 +27,7 @@ public class Borrower extends User implements Serializable {
         return "Name: " + getName() + "\n" +
                 "LibraryCardNumber: " + getLibraryCardNumber() + "\n" +
                 "Username: " + getUsername() + "\n" +
-                "Password: " + getPassword() + "\n" + "Books borrowed: " + myBorrowedBooks.size();
+                "Books borrowed: " + myBorrowedBooks.size();
     }
 
     public void showMyBorrowedBooks(boolean showBooksForLibrarian) {
@@ -55,7 +55,8 @@ public class Borrower extends User implements Serializable {
     }
 
     private void readWhatBookToReturn() {
-        System.out.println("\nIf you want to return a book, enter its number. " +
+        System.out.println("\n" + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT +
+                "If you want to return a book, enter its number. " +
                 "\nTo return to the main menu, enter 0");
         int returnBookInt = Helpers.readUserInt(-1, myBorrowedBooks.size() + 1) - 1;
 
