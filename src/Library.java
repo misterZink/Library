@@ -43,15 +43,15 @@ public class Library implements Serializable {
         librarian.setUsername("librarian");
         librarian.setPassword("lib");
 
-        Borrower borrower1 = new Borrower("TestName", 123456);
+        Borrower borrower1 = new Borrower("Robin", 123456);
         borrower1.setUsername("user1");
         borrower1.setPassword("Password1!");
 
-        Borrower borrower2 = new Borrower("TestName2", 654321);
+        Borrower borrower2 = new Borrower("Ziggi", 654321);
         borrower2.setUsername("user2");
         borrower2.setPassword("Password2!");
 
-        Borrower borrower3 = new Borrower("TestName3", 741852);
+        Borrower borrower3 = new Borrower("Kungen", 741852);
         borrower3.setUsername("user3");
         borrower3.setPassword("Password3!");
 
@@ -129,10 +129,10 @@ public class Library implements Serializable {
     }
 
     public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
-        numberedHashMap.forEach((k, v) -> System.out.println(
-                ConsoleColor.MAGENTA_BOLD_BRIGHT + k.toString() + "."
-                        + ConsoleColor.RESET
-                        + v.toString()));
+        numberedHashMap.forEach((k, v) -> {
+            Helpers.printInMenuColors(k.toString() + ".");
+            System.out.print(v.toString());
+        });
     }
 
     public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap, String errorMessage) {

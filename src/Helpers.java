@@ -50,4 +50,21 @@ public class Helpers {
         }
         return numberedHashMap;
     }
+
+    public static void printMenuTitle(String title) {
+        System.out.println(ConsoleColor.MAGENTA_BOLD_BRIGHT
+                + "\t\t\t\t\t\t\t\t\t"
+                + title.toUpperCase()
+                + ConsoleColor.RESET);
+    }
+
+    public static void printInMenuColors(String input) {
+        System.out.println("\n"
+                + ConsoleColor.BLACK_BACKGROUND_BRIGHT
+                + ""
+                + ConsoleColor.YELLOW_BOLD_BRIGHT
+                + input
+                + ConsoleColor.RESET
+        );
+    }
 }
