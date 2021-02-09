@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.util.*;
 
 public class Helpers {
@@ -30,41 +29,45 @@ public class Helpers {
         return userInput;
     }
 
-    public static <T> HashMap<Integer, T> createNumberedHashMap(HashMap<String, T> sourceHashMap) {
-        List<T> sourceList = new ArrayList<>(sourceHashMap.values());
-        HashMap<Integer, T> numberedHashMap = new HashMap<>();
+    public static HashMap<Integer, Book> createNumberedHashMap(HashMap<String, Book> sourceHashMap) {
+        List<Book> sourceList = new ArrayList<>(sourceHashMap.values());
+        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
         Integer counter = 1;
-        for (T t: sourceList) {
+        for (Book book: sourceList) {
+            numberedHashMap.put(counter, book);
+            counter ++;
+        }
+        return numberedHashMap;
+    }
+
+    public static HashMap<Integer, Book> createNumberedHashMapFromList(List<Book> sourceList) {
+        HashMap<Integer, Book> numberedHashMap = new HashMap<>();
+        Integer counter = 1;
+        for (Book t: sourceList) {
             numberedHashMap.put(counter, t);
             counter ++;
         }
         return numberedHashMap;
     }
 
-    public static <T> HashMap<Integer, T> createNumberedHashMapFromList(List<T> sourceList) {
-        HashMap<Integer, T> numberedHashMap = new HashMap<>();
-        Integer counter = 1;
-        for (T t: sourceList) {
-            numberedHashMap.put(counter, t);
-            counter ++;
-        }
-        return numberedHashMap;
-    }
-
-    public static void printMenuTitle(String title) {
+    public static void printMenuTitle(String text) {
         System.out.println(ConsoleColor.MAGENTA_BOLD_BRIGHT
                 + "\t\t\t\t\t\t\t\t\t"
-                + title.toUpperCase()
+                + text.toUpperCase()
                 + ConsoleColor.RESET);
     }
 
-    public static void printInMenuColors(String input) {
+    public static void printInMenuColors(String text) {
         System.out.println("\n"
                 + ConsoleColor.BLACK_BACKGROUND_BRIGHT
                 + ""
                 + ConsoleColor.YELLOW_BOLD_BRIGHT
-                + input
+                + text
                 + ConsoleColor.RESET
         );
+    }
+
+    public static void printWarning(String text){
+        System.out.println(ConsoleColor.RED_BOLD + text + ConsoleColor.RESET);
     }
 }

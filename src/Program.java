@@ -17,19 +17,15 @@ public class Program {
 
         boolean incorrectUsername = !readUsername();
         if (incorrectUsername) {
-            System.out.println(ConsoleColor.RED_BOLD +
-                    "You seem to have forgotten your username or password, " +
-                    "please contact customer service."
-                    + ConsoleColor.RESET);
+            Helpers.printWarning("You seem to have forgotten your username or password, " +
+                    "please contact customer service.");
             return;
         }
 
         boolean incorrectPassword = !readPassword();
         if (incorrectPassword) {
-            System.out.println(ConsoleColor.RED_BOLD +
-                    "You seem to have forgotten your username or password, " +
-                    "please contact customer service."
-                    + ConsoleColor.RESET);
+            Helpers.printWarning("You seem to have forgotten your username or password, " +
+                    "please contact customer service.");
             return;
         }
 
@@ -41,6 +37,7 @@ public class Program {
             currentBorrower = (Borrower) currentUser;
             runBorrowerMenu();
         }
+        Helpers.printMenuTitle("Thank you for visiting the library!");
     }
 
     private HashMap<String, User> loadUsers() {
@@ -54,10 +51,6 @@ public class Program {
                         borrower -> tempUserHashMap.put(borrower.getValue().getUsername(), borrower.getValue())
                 );
         return tempUserHashMap;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
     }
 
     private void runLibrarianMenu() {
@@ -109,15 +102,15 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All borrowed books");
-                library.showBooks(library.getAllBorrowedBooks(), " borrowed ");
+                library.showBooks(library.getAllBorrowedBooks(), "borrowed");
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books");
-                library.showBooks(library.getAllBooks(), " ");
+                library.showBooks(library.getAllBooks(), "");
             }
             case 3 -> {
                 Helpers.printMenuTitle("All available books");
-                library.showBooks(library.getAllAvailableBooks(), " available ");
+                library.showBooks(library.getAllAvailableBooks(), "available");
             }
             case 4 -> {
                 Helpers.printMenuTitle("Add book to library");
@@ -144,7 +137,7 @@ public class Program {
                 library.findBorrowerByName();
             }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
-            default -> System.out.println("Your choice does not exist, try again.");
+            default -> Helpers.printWarning("Your choice does not exist, try again.");
         }
     }
 
@@ -152,7 +145,7 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All books");
-                callBorrowBook(library.showBooks(library.getAllBooks(), " "));
+                callBorrowBook(library.showBooks(library.getAllBooks(), ""));
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books sorted by title");
@@ -164,7 +157,7 @@ public class Program {
             }
             case 4 -> {
                 Helpers.printMenuTitle("All available books");
-                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), " available "));
+                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available"));
             }
             case 5 -> {
                 Helpers.printMenuTitle("My borrowed books");
@@ -199,9 +192,8 @@ public class Program {
                 .filter(book -> !LocalDate.now().isBefore(book.getReturnDate()))
                 .collect(Collectors.toList());
         if (tempBookList.size() > 0) {
-            System.out.println(ConsoleColor.RED_BOLD + "\n\nYou have books to return:\n");
-            tempBookList.forEach(book -> System.out.println(book.getTitle() + ", RETURN DATE: " + book.getReturnDate()));
-            System.out.println(ConsoleColor.RESET);
+            Helpers.printWarning("\n\nYou have books to return:\n");
+            tempBookList.forEach(book -> Helpers.printWarning(book.getTitle() + ", RETURN DATE: " + book.getReturnDate()));
         }
     }
 
@@ -218,7 +210,7 @@ public class Program {
 
             if (currentUser == null && loginAttempts >= 10) {
                 return false;
-            } else if (currentUser == null) System.out.println("Username does not exist, please try again.");
+            } else if (currentUser == null) Helpers.printWarning("Username does not exist, please try again.");
         } while (currentUser == null);
         return true;
     }
@@ -237,7 +229,7 @@ public class Program {
             loginAttempts++;
             if (!wasFound && loginAttempts >= 10) {
                 return false;
-            } else if (!wasFound) System.out.println("Wrong password, please try again.");
+            } else if (!wasFound) Helpers.printWarning("Wrong password, please try again.");
         } while (!wasFound);
         return true;
     }
@@ -282,7 +274,7 @@ public class Program {
             String finalUsername = username;
             isNotValid = allUsers.values().stream()
                     .anyMatch(u -> u.getUsername().equals(finalUsername));
-            if (isNotValid) System.out.println("Usename already exists, please try another:");
+            if (isNotValid) Helpers.printWarning("Usename already exists, please try another:");
         } while (isNotValid);
         user.setUsername(username);
     }
@@ -297,7 +289,7 @@ public class Program {
             password = Helpers.readUserString();
             Matcher matcher = pattern.matcher(password);
             isValid = matcher.find();
-            if (!isValid) System.out.println("Invalid password, try again:");
+            if (!isValid) Helpers.printWarning("Invalid password, try again:");
         } while (!isValid);
         System.out.println("That password works perfectly!");
         user.setPassword(password);

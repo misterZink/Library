@@ -25,20 +25,46 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return
-                "Title: " + title + "\n" +
-                        "Author: " + author.toString() + "\n" +
-                        "Description: " + bookDescription + "\n" +
-                        "ISBN: " + isbn + "\n" +
-                        "Is available: " + isAvailable + "\n" +
-                        (returnDate != null ?
-                                "Return date: " + returnDate + "\n" : "");
+        return "Title: " + title + "\n" +
+                "Author: " + author.toString() + "\n" +
+                "Description: " + bookDescription + "\n" +
+                "ISBN: " + isbn + "\n" +
+                "Available: " + (isAvailable ? "Yes" : "No") + "\n" +
+                (returnDate != null ? "Return date: " + returnDate + "\n" : "");
+    }
+
+    public String toString(String version) {
+        if (version.equals("available")) {
+            return "Title: " + title + "\n" +
+                    "Author: " + author.toString() + "\n" +
+                    "Description: " + bookDescription + "\n" +
+                    "ISBN: " + isbn + "\n";
+        } else if (version.equals("borrowed")){
+            return "Title: " + title + "\n" +
+                    "Author: " + author.toString() + "\n" +
+                    "Description: " + bookDescription + "\n" +
+                    "ISBN: " + isbn + "\n" +
+                    "Borrowed by: " + myBorrower.getLibraryCardNumber() + "\n" +
+                    "Return date: " + returnDate + "\n";
+        } else {
+            return "Title: " + title + "\n" +
+                    "Author: " + author.toString() + "\n" +
+                    "Description: " + bookDescription + "\n" +
+                    "ISBN: " + isbn + "\n" +
+                    "Available: " + (isAvailable ? "Yes" : "No") + "\n";
+        }
     }
 
     public void borrowMe(Borrower currentBorrower) {
         setAvailable(false);
         setReturnDate(LocalDate.now().plusDays(isPopular() ? 14 : 28));
         setMyBorrower(currentBorrower);
+    }
+
+    public void returnMe() {
+        setMyBorrower(null);
+        setReturnDate(null);
+        setAvailable(true);
     }
 
     public String getTitle() {
