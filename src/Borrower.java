@@ -18,7 +18,7 @@ public class Borrower extends User implements Serializable {
         this.libraryCardNumber = libraryCardNumber;
     }
 
-    public void addToMyBorrowedBooks(Book book){
+    public void addToMyBorrowedBooks(Book book) {
         myBorrowedBooks.add(book);
     }
 
@@ -27,20 +27,19 @@ public class Borrower extends User implements Serializable {
         return "Name: " + getName() + "\n" +
                 "LibraryCardNumber: " + getLibraryCardNumber() + "\n" +
                 "Username: " + getUsername() + "\n" +
-                "Password: " + getPassword() + "\n" +  "Books borrowed: " + myBorrowedBooks.size();
+                "Books borrowed: " + myBorrowedBooks.size();
     }
 
     public void showMyBorrowedBooks(boolean showBooksForLibrarian) {
         if (myBorrowedBooks.size() > 0) {
             int printListnumber = 1;
             for (Book book : myBorrowedBooks) {
+                System.out.print(ConsoleColor.MAGENTA_BOLD_BRIGHT + "\n" + printListnumber++ + ". " + ConsoleColor.RESET);
                 if (!LocalDate.now().isBefore(book.getReturnDate())) {
-                    System.out.println(ConsoleColor.RED_BOLD);
+                    System.out.print(ConsoleColor.RED_BOLD);
                 }
-                System.out.println("\n"
-                        + printListnumber++
-                        + ". "
-                        + book.getTitle() + " by "
+                System.out.println(book.getTitle()
+                        + " by "
                         + book.getAuthor().toString() + " is due back "
                         + book.getReturnDate()
                         + " ( "
@@ -50,16 +49,16 @@ public class Borrower extends User implements Serializable {
             if (!showBooksForLibrarian) {
                 readWhatBookToReturn();
             }
-        }
-        else {
+        } else {
             System.out.println("You have no borrowed books.");
         }
     }
 
     private void readWhatBookToReturn() {
-        System.out.println("\nIf you want to return a book, enter its number. " +
+        System.out.println("\n" + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT +
+                "If you want to return a book, enter its number. " +
                 "\nTo return to the main menu, enter 0");
-        int returnBookInt = Helpers.readUserInt(-1, myBorrowedBooks.size() + 1) -1;
+        int returnBookInt = Helpers.readUserInt(-1, myBorrowedBooks.size() + 1) - 1;
 
         if (returnBookInt == -1) {
             return;
@@ -77,7 +76,7 @@ public class Borrower extends User implements Serializable {
         book.setMyBorrower(null);
         book.setReturnDate(null);
         book.setAvailable(true);
-        System.out.println("You haven now returned the book: " + ConsoleColor.GREEN +  book.getTitle() + ConsoleColor.RESET);
+        System.out.println("You haven now returned the book: " + ConsoleColor.GREEN + book.getTitle() + ConsoleColor.RESET);
     }
 
     public void setLibraryCardNumber(int libraryCardNumber) {

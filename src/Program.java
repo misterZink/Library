@@ -64,7 +64,7 @@ public class Program {
         int userInput;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt(-1, 8);
+            userInput = Helpers.readUserInt(-1, 10);
             librarianMenuSwitch(userInput);
         } while (userInput != 0);
     }
@@ -80,13 +80,15 @@ public class Program {
     }
 
     private void librarianMenuChoices() {
-        Helpers.printInMenuColors("1. List all borrowed books"
-                + "\n2. Add new book to library"
-                + "\n3. Remove book from library"
-                + "\n4. Add new user"
-                + "\n5. List all borrowers"
-                + "\n6. List all librarians"
-                + "\n7. Find borrower by name"
+        Helpers.printInMenuColors( "1. List all borrowed books"
+                + "\n2. List all books"
+                + "\n3. List all available books"
+                + "\n4. Add new book to library"
+                + "\n5. Remove book from library"
+                + "\n6. Add new user"
+                + "\n7. List all borrowers"
+                + "\n8. List all librarians"
+                + "\n9. Find borrower by name"
                 + "\n0. Exit program\n"
         );
     }
@@ -110,26 +112,34 @@ public class Program {
                 library.showBooks(library.getAllBorrowedBooks(), " borrowed ");
             }
             case 2 -> {
+                Helpers.printMenuTitle("All books");
+                library.showBooks(library.getAllBooks(), " ");
+            }
+            case 3 -> {
+                Helpers.printMenuTitle("All available books");
+                library.showBooks(library.getAllAvailableBooks(), " available ");
+            }
+            case 4 -> {
                 Helpers.printMenuTitle("Add book to library");
                 library.addBook();
             }
-            case 3 -> {
+            case 5 -> {
                 Helpers.printMenuTitle("Remove book from library");
                 library.removeBook();
             }
-            case 4 -> {
+            case 6 -> {
                 Helpers.printMenuTitle("Add new user to system");
                 addNewUser();
             }
-            case 5 -> {
+            case 7 -> {
                 Helpers.printMenuTitle("All borrowers");
                 library.showAllUsersInList(library.getAllBorrowers());
             }
-            case 6 -> {
+            case 8 -> {
                 Helpers.printMenuTitle("All librarians");
                 library.showAllUsersInList(library.getAllLibrarians());
             }
-            case 7 -> {
+            case 9 -> {
                 Helpers.printMenuTitle("Find borrower by name");
                 library.findBorrowerByName();
             }
@@ -173,7 +183,6 @@ public class Program {
                     ConsoleColor.RED_BOLD + "Your choice does not exist, try again." + ConsoleColor.RESET);
         }
     }
-
 
 
     private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
