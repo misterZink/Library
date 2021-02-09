@@ -37,7 +37,6 @@ public class Library implements Serializable {
         return library;
     }
 
-    // Creates standards users, if there is none
     private void initiateLibrarianAndBorrowers() {
         Librarian librarian = new Librarian("Admin");
         librarian.setUsername("librarian");
@@ -95,7 +94,7 @@ public class Library implements Serializable {
         System.out.println(bookInfo.get(0) + " has been successfully added to the library!");
     }
 
-    private List<String> addBookDialog(){
+    private List<String> addBookDialog() {
         List<String> dialog = new ArrayList<>();
         dialog.add("Enter title: ");
         dialog.add("Enter author's first name: ");
@@ -121,24 +120,31 @@ public class Library implements Serializable {
 
                 System.out.println(bookTitle + " has been removed from the library.");
             } else {
-                System.out.println(bookTitle + " is currently borrowed and cannot be removed from library.");
+                Helpers.printWarning(bookTitle + " is currently borrowed and cannot be removed from library.");
             }
         } else {
             System.out.println("Book was not found in library.");
         }
     }
 
-    public <T> void printHashMap(HashMap<Integer, T> numberedHashMap) {
+    public void printHashMap(HashMap<Integer, Book> numberedHashMap, String version) {
+        numberedHashMap.forEach((k, v) -> {
+            Helpers.printInMenuColors(k.toString() + ".");
+            System.out.print(v.toString(version));
+        });
+    }
+
+    public void printHashMap(HashMap<Integer, Book> numberedHashMap) {
         numberedHashMap.forEach((k, v) -> {
             Helpers.printInMenuColors(k.toString() + ".");
             System.out.print(v.toString());
         });
     }
 
-    public <T> HashMap<Integer, T> showBooks(HashMap<String, T> hashMap, String errorMessage) {
-        HashMap<Integer, T> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
-        if (numberedHashMap.size() == 0) System.out.println("There are no" + errorMessage + "books at the moment.");
-        printHashMap(numberedHashMap);
+    public HashMap<Integer, Book> showBooks(HashMap<String, Book> hashMap, String version) {
+        HashMap<Integer, Book> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
+        if (numberedHashMap.size() == 0) System.out.println("There are no " + version + " books at the moment.");
+        printHashMap(numberedHashMap, version);
         return numberedHashMap;
     }
 
@@ -162,10 +168,10 @@ public class Library implements Serializable {
                 System.out.println("Books by " + foundBooks.get(0).getAuthor().toString());
                 printHashMap(numberedHashMap);
             } else {
-                System.out.println("No author is found.");
+                Helpers.printWarning("No author is found.");
             }
         } else {
-            System.out.println("No author is found.");
+            Helpers.printWarning("No author is found.");
         }
         return numberedHashMap;
     }
@@ -191,10 +197,10 @@ public class Library implements Serializable {
                 System.out.println("\nBooks that match your search:");
                 printHashMap(numberedHashMap);
             } else {
-                System.out.println("Title or ISBN not found.");
+                Helpers.printWarning("Title or ISBN not found.");
             }
         } else {
-            System.out.println("Title or ISBN not found.");
+            Helpers.printWarning("Title or ISBN not found.");
         }
         return numberedHashMap;
     }
@@ -262,8 +268,8 @@ public class Library implements Serializable {
         return allBorrowedBooks;
     }
 
-    // Reads user input, make all characters to lower case and then removes all special characters, including dots and spaces in beginning of the String
-    // Needs to be chained like this so it can be effectively final, otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
+    // Needs to be chained like this so it can be effectively final,
+    // otherwise if we do this in multiple steps, we would have to make a temp String to use in our lambda
     private String searchPhraseInput() {
         return Helpers.readUserString().toLowerCase().replaceAll("^[\\W]+", "");
     }
@@ -278,16 +284,14 @@ public class Library implements Serializable {
                 currentBorrower.addToMyBorrowedBooks(book);
                 System.out.println(book.getTitle() + " is now yours until " + book.getReturnDate());
             } else {
-                System.out.println("The book is already borrowed");
+                Helpers.printWarning("The book is already borrowed");
             }
         }
     }
 
     public int readWhatBookToBorrow(int max) {
-        System.out.println(ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
-                + "If you want to borrow a book, enter its number. "
-                + "\nTo return to the main menu, enter 0.\n"
-                + ConsoleColor.RESET);
+        Helpers.printInMenuColors("If you want to borrow a book, enter its number. "
+                + "\nTo return to the main menu, enter 0.\n");
         return Helpers.readUserInt(-1, max);
     }
 

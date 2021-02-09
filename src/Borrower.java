@@ -34,7 +34,7 @@ public class Borrower extends User implements Serializable {
         if (myBorrowedBooks.size() > 0) {
             int printListnumber = 1;
             for (Book book : myBorrowedBooks) {
-                System.out.print(ConsoleColor.MAGENTA_BOLD_BRIGHT + "\n" + printListnumber++ + ". " + ConsoleColor.RESET);
+                Helpers.printInMenuColors(printListnumber++ + ".");
                 if (!LocalDate.now().isBefore(book.getReturnDate())) {
                     System.out.print(ConsoleColor.RED_BOLD);
                 }
@@ -55,9 +55,8 @@ public class Borrower extends User implements Serializable {
     }
 
     private void readWhatBookToReturn() {
-        System.out.println("\n" + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT +
-                "If you want to return a book, enter its number. " +
-                "\nTo return to the main menu, enter 0");
+        Helpers.printInMenuColors("If you want to return a book, enter its number." +
+                "\nTo return to the main menu, enter 0\n");
         int returnBookInt = Helpers.readUserInt(-1, myBorrowedBooks.size() + 1) - 1;
 
         if (returnBookInt == -1) {
@@ -73,9 +72,7 @@ public class Borrower extends User implements Serializable {
         library.removeBookFromAllBorrowedBooks(book);
         library.addBookToAllAvailableBooks(book);
         myBorrowedBooks.remove(index);
-        book.setMyBorrower(null);
-        book.setReturnDate(null);
-        book.setAvailable(true);
+        book.returnMe();
         System.out.println("You haven now returned the book: " + ConsoleColor.GREEN + book.getTitle() + ConsoleColor.RESET);
     }
 
