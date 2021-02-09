@@ -33,7 +33,7 @@ public class Program {
             return;
         }
 
-        printMenuTitle("Welcome to the library, " + currentUser.getName() + "!");
+        Helpers.printMenuTitle("Welcome to the library, " + currentUser.getName() + "!");
 
         if (currentUser.isLibrarian()) {
             runLibrarianMenu();
@@ -64,7 +64,7 @@ public class Program {
         int userInput;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt(-1, 8);
+            userInput = Helpers.readUserInt(-1, 10);
             librarianMenuSwitch(userInput);
         } while (userInput != 0);
     }
@@ -80,9 +80,7 @@ public class Program {
     }
 
     private void librarianMenuChoices() {
-        System.out.println("\n"
-                + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
-                + "1. List all borrowed books"
+        Helpers.printInMenuColors( "1. List all borrowed books"
                 + "\n2. List all books"
                 + "\n3. List all available books"
                 + "\n4. Add new book to library"
@@ -92,14 +90,11 @@ public class Program {
                 + "\n8. List all librarians"
                 + "\n9. Find borrower by name"
                 + "\n0. Exit program\n"
-                + ConsoleColor.RESET
         );
     }
 
     private void borrowerMenuChoices() {
-        System.out.println("\n"
-                + ConsoleColor.BLACK_BACKGROUND_BRIGHT + "" + ConsoleColor.MAGENTA_BOLD_BRIGHT
-                + "1. List all books"
+        Helpers.printInMenuColors("1. List all books"
                 + "\n2. Sort all books alphabetically by title"
                 + "\n3. Sort all books alphabetically by author"
                 + "\n4. List available books"
@@ -107,40 +102,45 @@ public class Program {
                 + "\n6. Search for book by title or ISBN"
                 + "\n7. Search for book by author"
                 + "\n0. Exit program\n"
-                + ConsoleColor.RESET
         );
     }
 
     private void librarianMenuSwitch(int choice) {
         switch (choice) {
             case 1 -> {
-                printMenuTitle("All borrowed books");
+                Helpers.printMenuTitle("All borrowed books");
                 library.showBooks(library.getAllBorrowedBooks(), " borrowed ");
             }
-            case 2 -> library.showBooks(library.getAllBooks(), " ");
-            case 3 -> library.showBooks(library.getAllAvailableBooks(), " available ");
+            case 2 -> {
+                Helpers.printMenuTitle("All books");
+                library.showBooks(library.getAllBooks(), " ");
+            }
+            case 3 -> {
+                Helpers.printMenuTitle("All available books");
+                library.showBooks(library.getAllAvailableBooks(), " available ");
+            }
             case 4 -> {
-                printMenuTitle("Add book to library");
+                Helpers.printMenuTitle("Add book to library");
                 library.addBook();
             }
             case 5 -> {
-                printMenuTitle("Remove book from library");
+                Helpers.printMenuTitle("Remove book from library");
                 library.removeBook();
             }
             case 6 -> {
-                printMenuTitle("Add new user to system");
+                Helpers.printMenuTitle("Add new user to system");
                 addNewUser();
             }
             case 7 -> {
-                printMenuTitle("Show all users");
+                Helpers.printMenuTitle("All borrowers");
                 library.showAllUsersInList(library.getAllBorrowers());
             }
             case 8 -> {
-                printMenuTitle("Show all librarians");
+                Helpers.printMenuTitle("All librarians");
                 library.showAllUsersInList(library.getAllLibrarians());
             }
             case 9 -> {
-                printMenuTitle("Find borrower by name");
+                Helpers.printMenuTitle("Find borrower by name");
                 library.findBorrowerByName();
             }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
@@ -151,31 +151,31 @@ public class Program {
     private void borrowerMenuSwitch(int choice) {
         switch (choice) {
             case 1 -> {
-                printMenuTitle("All books");
+                Helpers.printMenuTitle("All books");
                 callBorrowBook(library.showBooks(library.getAllBooks(), " "));
             }
             case 2 -> {
-                printMenuTitle("All books sorted by author");
+                Helpers.printMenuTitle("All books sorted by title");
                 callBorrowBook(library.sortBooks("title"));
             }
             case 3 -> {
-                printMenuTitle("All books sorted by title");
+                Helpers.printMenuTitle("All books sorted by author");
                 callBorrowBook(library.sortBooks("author"));
             }
             case 4 -> {
-                printMenuTitle("All available books");
+                Helpers.printMenuTitle("All available books");
                 callBorrowBook(library.showBooks(library.getAllAvailableBooks(), " available "));
             }
             case 5 -> {
-                printMenuTitle("My borrowed books");
+                Helpers.printMenuTitle("My borrowed books");
                 currentBorrower.showMyBorrowedBooks(false);
             }
             case 6 -> {
-                printMenuTitle("Find book by title or isbn");
+                Helpers.printMenuTitle("Find book by title or isbn");
                 callBorrowBook(library.findBookByTitleOrISBN());
             }
             case 7 -> {
-                printMenuTitle("Find book by author");
+                Helpers.printMenuTitle("Find book by author");
                 callBorrowBook(library.findBookByAuthor());
             }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
@@ -184,12 +184,6 @@ public class Program {
         }
     }
 
-    private void printMenuTitle(String title) {
-        System.out.println(ConsoleColor.GREEN_BOLD_BRIGHT
-                + "\t\t\t\t\t\t\t\t\t"
-                + title.toUpperCase()
-                + ConsoleColor.RESET);
-    }
 
     private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
         if (numberedHashMap.size() > 0) {
