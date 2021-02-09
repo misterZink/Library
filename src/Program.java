@@ -139,7 +139,7 @@ public class Program {
                 printMenuTitle("Find borrower by name");
                 library.findBorrowerByName();
             }
-            case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
+            case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> System.out.println("Your choice does not exist, try again.");
         }
     }
@@ -174,7 +174,7 @@ public class Program {
                 printMenuTitle("Find book by author");
                 callBorrowBook(library.findBookByAuthor());
             }
-            case 9 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
+            case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> System.out.println(
                     ConsoleColor.RED_BOLD + "Your choice does not exist, try again." + ConsoleColor.RESET);
         }
