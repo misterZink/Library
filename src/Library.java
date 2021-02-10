@@ -1,8 +1,8 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -245,22 +245,39 @@ public class Library implements Serializable {
         return numberedHashMap;
     }
 
-    public void findBorrowerByName() {
-        System.out.println("Enter the name of the borrower:");
+    public void findBorrowerByNameOrLibraryCardNo() {
+        System.out.println("Enter name or library card number of the borrower:");
         String userSearchPhrase = searchPhraseInput();
+        Borrower foundBorrower = null;
+        boolean matchFound = false;
 
         if (!userSearchPhrase.isEmpty()) {
-            allBorrowers.entrySet().stream()
-                    .filter(BorrowerEntry -> BorrowerEntry.getValue().getName().toLowerCase().contains(userSearchPhrase))
-                    .forEach(BorrowerEntry -> {
-                        System.out.println("\nUser: " + BorrowerEntry.getValue().getName());
-                        if (BorrowerEntry.getValue().myBorrowedBooks.size() > 0) {
-                            System.out.println("Borrowed books:");
-                            BorrowerEntry.getValue().showMyBorrowedBooks(true);
-                        }
-                    });
-        } else {
-            System.out.println("No user found with that name.");
+            Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
+
+            for (Borrower borrower : allBorrowers.values()) {
+                Matcher matcher = pattern.matcher(borrower.getName().toLowerCase());
+                Matcher matcher2 = pattern.matcher(String.valueOf(borrower.getLibraryCardNumber()));
+
+                if (matcher.find() || matcher2.find()) {
+                    matchFound = true;
+                    foundBorrower = borrower;
+                    break;
+                }
+            }
+        }
+        if (matchFound) {
+            System.out.println("\nName: " + foundBorrower.getName() +
+                    "\nLibrary card no: " + foundBorrower.getLibraryCardNumber());
+            if (foundBorrower.myBorrowedBooks.size() > 0) {
+                System.out.println("Borrowed books:");
+                foundBorrower.showMyBorrowedBooks(true);
+            }
+            else {
+                System.out.println(foundBorrower.getName() + " has no borrowed books.");
+            }
+        }
+        else {
+            System.out.println("No such user found.");
         }
     }
 

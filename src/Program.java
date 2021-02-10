@@ -134,7 +134,7 @@ public class Program {
             }
             case 9 -> {
                 Helpers.printMenuTitle("Find borrower by name");
-                library.findBorrowerByName();
+                library.findBorrowerByNameOrLibraryCardNo();
             }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> Helpers.printWarning("Your choice does not exist, try again.");
