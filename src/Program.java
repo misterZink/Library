@@ -67,13 +67,13 @@ public class Program {
         int userInput;
         do {
             borrowerMenuChoices();
-            userInput = Helpers.readUserInt(-1, 8);
+            userInput = Helpers.readUserInt(-1, 9);
             borrowerMenuSwitch(userInput);
         } while (userInput != 0);
     }
 
     private void librarianMenuChoices() {
-        Helpers.printInMenuColors( "1. List all borrowed books"
+        Helpers.printInMenuColors("1. List all borrowed books"
                 + "\n2. List all books"
                 + "\n3. List all available books"
                 + "\n4. Add new book to library"
@@ -92,9 +92,10 @@ public class Program {
                 + "\n2. Sort all books alphabetically by title"
                 + "\n3. Sort all books alphabetically by author"
                 + "\n4. List available books"
-                + "\n5. List my borrowed books"
-                + "\n6. Search for book by title or ISBN"
-                + "\n7. Search for book by author"
+                + "\n5. List all popular books"
+                + "\n6. List my borrowed books"
+                + "\n7. Search for book by title or ISBN"
+                + "\n8. Search for book by author"
                 + "\n0. Exit program\n"
         );
     }
@@ -165,14 +166,18 @@ public class Program {
                 callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available", false));
             }
             case 5 -> {
+                Helpers.printMenuTitle("Popular books");
+                callBorrowBook(library.showPopularBooks(library.getAllBooks()));
+            }
+            case 6 -> {
                 Helpers.printMenuTitle("My borrowed books");
                 currentBorrower.showMyBorrowedBooks(false);
             }
-            case 6 -> {
+            case 7 -> {
                 Helpers.printMenuTitle("Find book by title or isbn");
                 callBorrowBook(library.findBookByTitleOrISBN());
             }
-            case 7 -> {
+            case 8 -> {
                 Helpers.printMenuTitle("Find book by author");
                 callBorrowBook(library.findBookByAuthor());
             }

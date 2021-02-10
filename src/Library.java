@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -171,6 +170,16 @@ public class Library implements Serializable {
         if (numberedHashMap.size() == 0) System.out.println("There are no " + version + " books at the moment.");
         printHashMap(numberedHashMap, version, isLibrarian);
         return numberedHashMap;
+    }
+
+    public HashMap<Integer, Book> showPopularBooks(HashMap<String, Book> hashMap) {
+        HashMap<String, Book> tempHashMap = new HashMap<>();
+        hashMap.forEach((s, book) -> {
+            if (book.isPopular()) {
+                tempHashMap.put(book.getTitle(), book);
+            }
+        });
+        return showBooks(tempHashMap, "popular", false);
     }
 
     public <T> void showAllUsersInList(HashMap<?, T> userList) {
