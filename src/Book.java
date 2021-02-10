@@ -6,6 +6,7 @@ public class Book implements Serializable {
     private Author author;
     private String bookDescription;
     private String isbn;
+    private int timesBorrowed;
     private boolean isAvailable;
     private boolean isPopular;
     private LocalDate returnDate;
@@ -18,6 +19,7 @@ public class Book implements Serializable {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.timesBorrowed = 0;
         this.bookDescription = bookDescription;
         this.isAvailable = true;
         this.isPopular = isPopular;
@@ -59,6 +61,7 @@ public class Book implements Serializable {
         setAvailable(false);
         setReturnDate(LocalDate.now().plusDays(isPopular() ? 14 : 28));
         setMyBorrower(currentBorrower);
+        timesBorrowed ++;
     }
 
     public void returnMe() {
