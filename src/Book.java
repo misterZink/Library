@@ -100,5 +100,13 @@ public class Book implements Serializable {
         return isPopular;
     }
 
+    // only used by temporary book for presentation
+    public void setTimesBorrowed(int timesBorrowed) {
+        this.timesBorrowed = timesBorrowed;
+    }
+
+    public int getTimesBorrowed(){
+        return timesBorrowed;
+    }
 }
 

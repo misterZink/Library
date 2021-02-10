@@ -66,7 +66,6 @@ public class Library implements Serializable {
 
     }
 
-
     // This method is only created to demonstrate what happens if a book is due to return
     private void tempBookForPresentation(Borrower borrower) {
         Book tempBook = new Book("Head First Java",
@@ -80,6 +79,7 @@ public class Library implements Serializable {
         tempBook.setAvailable(false);
         tempBook.setReturnDate(LocalDate.now());
         tempBook.setMyBorrower(borrower);
+        tempBook.setTimesBorrowed(1);
         allBooks.put(tempBook.getTitle(), tempBook);
         allAvailableBooks.remove(tempBook.getTitle());
         allBorrowedBooks.put(tempBook.getTitle(), tempBook);
@@ -155,7 +155,7 @@ public class Library implements Serializable {
     public void printHashMap(HashMap<Integer, Book> numberedHashMap, String version, boolean isLibrarian) {
         numberedHashMap.forEach((k, v) -> {
             Helpers.printInMenuColors(k.toString() + ".");
-            System.out.print(v.toString(version, isLibrarian ));
+            System.out.print(v.toString(version, isLibrarian));
         });
     }
 
@@ -240,10 +240,26 @@ public class Library implements Serializable {
             case "author" -> sorted = allBooks.values().stream()
                     .sorted(Comparator.comparing(b -> b.getAuthor().getLastName()))
                     .collect(Collectors.toList());
+            case "times borrowed" -> sorted = allBooks.values().stream()
+                    .sorted(Comparator.comparingInt(Book::getTimesBorrowed))
+                    .collect(Collectors.toList());
         }
         numberedHashMap = Helpers.createNumberedHashMapFromList(sorted);
-        printHashMap(numberedHashMap);
+        if (sortBy.equals("times borrowed")) {
+            printNumberedList(sorted);
+        } else {
+            printHashMap(numberedHashMap);
+        }
         return numberedHashMap;
+    }
+
+    private void printNumberedList(List<Book> bookList) {
+        int counter = 1;
+        for (int i = bookList.size() - 1; i >= 0; i--) {
+            Helpers.printInMenuColors(counter + ".");
+            System.out.print(bookList.get(i).toString("", true));
+            counter ++;
+        }
     }
 
     public void findBorrowerByNameOrLibraryCardNo() {
@@ -252,25 +268,23 @@ public class Library implements Serializable {
 
         if (foundBorrower != null) {
             printBorrowerInfo(foundBorrower);
-        }
-        else {
+        } else {
             System.out.println("No such user found.");
         }
     }
 
-    private void printBorrowerInfo(Borrower borrower){
+    private void printBorrowerInfo(Borrower borrower) {
         System.out.println("\nName: " + borrower.getName() +
                 "\nLibrary card no: " + borrower.getLibraryCardNumber());
         if (borrower.myBorrowedBooks.size() > 0) {
             System.out.println("Borrowed books:");
             borrower.showMyBorrowedBooks(true);
-        }
-        else {
+        } else {
             System.out.println(borrower.getName() + " has no borrowed books.");
         }
     }
 
-    private Borrower returnBorrowerIfFound(String userSearchPhrase){
+    private Borrower returnBorrowerIfFound(String userSearchPhrase) {
         Borrower foundBorrower = null;
         if (!userSearchPhrase.isEmpty()) {
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);

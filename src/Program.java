@@ -57,7 +57,7 @@ public class Program {
         int userInput;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt(-1, 10);
+            userInput = Helpers.readUserInt(-1, 11);
             librarianMenuSwitch(userInput);
         } while (userInput != 0);
     }
@@ -82,6 +82,7 @@ public class Program {
                 + "\n7. List all borrowers"
                 + "\n8. List all librarians"
                 + "\n9. Find borrower by name"
+                + "\n10. Sort books by times borrowed"
                 + "\n0. Exit program\n"
         );
     }
@@ -135,6 +136,10 @@ public class Program {
             case 9 -> {
                 Helpers.printMenuTitle("Find borrower by name");
                 library.findBorrowerByNameOrLibraryCardNo();
+            }
+            case 10 -> {
+                Helpers.printMenuTitle("List most borrowed books");
+                library.sortBooks("times borrowed");
             }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> Helpers.printWarning("Your choice does not exist, try again.");
