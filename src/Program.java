@@ -73,7 +73,7 @@ public class Program {
     }
 
     private void librarianMenuChoices() {
-        Helpers.printInMenuColors( "1. List all borrowed books"
+        Helpers.printInMenuColors("1. List all borrowed books"
                 + "\n2. List all books"
                 + "\n3. List all available books"
                 + "\n4. Add new book to library"
@@ -239,17 +239,18 @@ public class Program {
     }
 
     public void addNewUser() {
+        System.out.println("Enter 0 to cancel and return to main menu.");
         System.out.println("Would you like to create a new \n1. Librarian \n2. Borrower");
-        int userInput = 0;
-        while (userInput != 1 && userInput != 2) {
-            userInput = Helpers.readUserInt(0, 3);
-        }
+        int userInput = Helpers.readUserInt(-1, 3);
+        if (userInput == 0) return;
+
         System.out.println("Enter name of new user:");
         String nameOfNewUser = Helpers.readUserString();
-        User newUser = userFactory(userInput);
+        if (nameOfNewUser.equals("0")) return;
 
+        User newUser = userFactory(userInput);
         newUser.setName(nameOfNewUser);
-        createUsername(newUser);
+        if (!createUsername(newUser)) return;
         createPassword(newUser);
 
         if (userInput == 1) {
@@ -269,18 +270,26 @@ public class Program {
         return ThreadLocalRandom.current().nextInt(10_000, 100_000);
     }
 
-    private void createUsername(User user) {
-        boolean isNotValid;
+    private boolean createUsername(User user) {
+        boolean isNotValid = true;
+        boolean wasCreated = false;
         String username;
         System.out.println("Enter username for new user:");
         do {
             username = Helpers.readUserString();
+            if (username.equals("0")) {
+                return wasCreated;
+            }
+
             String finalUsername = username;
             isNotValid = allUsers.values().stream()
                     .anyMatch(u -> u.getUsername().equals(finalUsername));
-            if (isNotValid) Helpers.printWarning("Usename already exists, please try another:");
+            if (isNotValid) Helpers.printWarning("Username already exists, please try another:");
+
         } while (isNotValid);
+        wasCreated = true;
         user.setUsername(username);
+        return wasCreated;
     }
 
     private void createPassword(User user) {
@@ -291,6 +300,7 @@ public class Program {
                 "Minimum 6 characters long with 1 upper case, 1 lower case, 1 digit and 1 special character:");
         do {
             password = Helpers.readUserString();
+            if (password.equals("0")) return;
             Matcher matcher = pattern.matcher(password);
             isValid = matcher.find();
             if (!isValid) Helpers.printWarning("Invalid password, try again:");
