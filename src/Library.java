@@ -179,7 +179,7 @@ public class Library implements Serializable {
                 tempHashMap.put(book.getTitle(), book);
             }
         });
-        return showBooks(tempHashMap, "popular");
+        return showBooks(tempHashMap, "popular", false);
     }
 
     public <T> void showAllUsersInList(HashMap<?, T> userList) {
