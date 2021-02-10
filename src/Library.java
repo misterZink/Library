@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -173,6 +172,16 @@ public class Library implements Serializable {
         return numberedHashMap;
     }
 
+    public HashMap<Integer, Book> showPopularBooks(HashMap<String, Book> hashMap) {
+        HashMap<String, Book> tempHashMap = new HashMap<>();
+        hashMap.forEach((s, book) -> {
+            if (book.isPopular()) {
+                tempHashMap.put(book.getTitle(), book);
+            }
+        });
+        return showBooks(tempHashMap, "popular");
+    }
+
     public <T> void showAllUsersInList(HashMap<?, T> userList) {
         if (userList != null && userList.size() > 0) {
             userList.forEach((s, u) -> System.out.println(u + "\n"));
@@ -252,25 +261,23 @@ public class Library implements Serializable {
 
         if (foundBorrower != null) {
             printBorrowerInfo(foundBorrower);
-        }
-        else {
+        } else {
             System.out.println("No such user found.");
         }
     }
 
-    private void printBorrowerInfo(Borrower borrower){
+    private void printBorrowerInfo(Borrower borrower) {
         System.out.println("\nName: " + borrower.getName() +
                 "\nLibrary card no: " + borrower.getLibraryCardNumber());
         if (borrower.myBorrowedBooks.size() > 0) {
             System.out.println("Borrowed books:");
             borrower.showMyBorrowedBooks(true);
-        }
-        else {
+        } else {
             System.out.println(borrower.getName() + " has no borrowed books.");
         }
     }
 
-    private Borrower returnBorrowerIfFound(String userSearchPhrase){
+    private Borrower returnBorrowerIfFound(String userSearchPhrase) {
         Borrower foundBorrower = null;
         if (!userSearchPhrase.isEmpty()) {
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);

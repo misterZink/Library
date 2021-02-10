@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class Helpers {
     private static final Scanner scan = new Scanner(System.in);
@@ -33,9 +37,9 @@ public class Helpers {
         List<Book> sourceList = new ArrayList<>(sourceHashMap.values());
         HashMap<Integer, Book> numberedHashMap = new HashMap<>();
         Integer counter = 1;
-        for (Book book: sourceList) {
+        for (Book book : sourceList) {
             numberedHashMap.put(counter, book);
-            counter ++;
+            counter++;
         }
         return numberedHashMap;
     }
@@ -43,9 +47,9 @@ public class Helpers {
     public static HashMap<Integer, Book> createNumberedHashMapFromList(List<Book> sourceList) {
         HashMap<Integer, Book> numberedHashMap = new HashMap<>();
         Integer counter = 1;
-        for (Book t: sourceList) {
+        for (Book t : sourceList) {
             numberedHashMap.put(counter, t);
-            counter ++;
+            counter++;
         }
         return numberedHashMap;
     }
@@ -67,7 +71,7 @@ public class Helpers {
         );
     }
 
-    public static void printWarning(String text){
+    public static void printWarning(String text) {
         System.out.println(ConsoleColor.RED_BOLD + text + ConsoleColor.RESET);
     }
 }
