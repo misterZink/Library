@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
@@ -59,6 +60,30 @@ public class Library implements Serializable {
         allBorrowers.put(borrower1.getUsername(), borrower1);
         allBorrowers.put(borrower2.getUsername(), borrower2);
         allBorrowers.put(borrower3.getUsername(), borrower3);
+
+        // This method only to create a tempbook for presentation to show what happens if a book is due to return
+        tempBookForPresentation(borrower1);
+
+    }
+
+
+    // This method is only created to demonstrate what happens if a book is due to return
+    private void tempBookForPresentation(Borrower borrower) {
+        Book tempBook = new Book("Head First Java",
+                new Author("Kathy", "Sierra")
+                , "9780596009205"
+                , "An interactive guide to the fundamentals of the Java programming language utilizes icons, cartoons, " +
+                "and numerous other visual aids to introduce the features and functions of Java and to teach the principles " +
+                "of designing and writing Java programs."
+                , false);
+
+        tempBook.setAvailable(false);
+        tempBook.setReturnDate(LocalDate.now());
+        tempBook.setMyBorrower(borrower);
+        allBooks.put(tempBook.getTitle(), tempBook);
+        allAvailableBooks.remove(tempBook.getTitle());
+        allBorrowedBooks.put(tempBook.getTitle(), tempBook);
+        borrower.addToMyBorrowedBooks(tempBook);
     }
 
     private void initiateLibraryBooks() {
