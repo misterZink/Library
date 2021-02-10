@@ -152,10 +152,10 @@ public class Library implements Serializable {
         }
     }
 
-    public void printHashMap(HashMap<Integer, Book> numberedHashMap, String version) {
+    public void printHashMap(HashMap<Integer, Book> numberedHashMap, String version, boolean isLibrarian) {
         numberedHashMap.forEach((k, v) -> {
             Helpers.printInMenuColors(k.toString() + ".");
-            System.out.print(v.toString(version));
+            System.out.print(v.toString(version, isLibrarian ));
         });
     }
 
@@ -166,10 +166,10 @@ public class Library implements Serializable {
         });
     }
 
-    public HashMap<Integer, Book> showBooks(HashMap<String, Book> hashMap, String version) {
+    public HashMap<Integer, Book> showBooks(HashMap<String, Book> hashMap, String version, boolean isLibrarian) {
         HashMap<Integer, Book> numberedHashMap = Helpers.createNumberedHashMap(hashMap);
         if (numberedHashMap.size() == 0) System.out.println("There are no " + version + " books at the moment.");
-        printHashMap(numberedHashMap, version);
+        printHashMap(numberedHashMap, version, isLibrarian);
         return numberedHashMap;
     }
 
