@@ -102,15 +102,15 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All borrowed books");
-                library.showBooks(library.getAllBorrowedBooks(), "borrowed");
+                library.showBooks(library.getAllBorrowedBooks(), "borrowed", true);
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books");
-                library.showBooks(library.getAllBooks(), "");
+                library.showBooks(library.getAllBooks(), "", true);
             }
             case 3 -> {
                 Helpers.printMenuTitle("All available books");
-                library.showBooks(library.getAllAvailableBooks(), "available");
+                library.showBooks(library.getAllAvailableBooks(), "available", true);
             }
             case 4 -> {
                 Helpers.printMenuTitle("Add book to library");
@@ -145,7 +145,7 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All books");
-                callBorrowBook(library.showBooks(library.getAllBooks(), ""));
+                callBorrowBook(library.showBooks(library.getAllBooks(), "", false));
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books sorted by title");
@@ -157,7 +157,7 @@ public class Program {
             }
             case 4 -> {
                 Helpers.printMenuTitle("All available books");
-                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available"));
+                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available", false));
             }
             case 5 -> {
                 Helpers.printMenuTitle("My borrowed books");
@@ -176,7 +176,6 @@ public class Program {
                     ConsoleColor.RED_BOLD + "Your choice does not exist, try again." + ConsoleColor.RESET);
         }
     }
-
 
     private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
         if (numberedHashMap.size() > 0) {

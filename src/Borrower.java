@@ -30,7 +30,7 @@ public class Borrower extends User implements Serializable {
                 "Books borrowed: " + myBorrowedBooks.size();
     }
 
-    public void showMyBorrowedBooks(boolean showBooksForLibrarian) {
+    public void showMyBorrowedBooks(boolean isLibrarian) {
         if (myBorrowedBooks.size() > 0) {
             int printListnumber = 1;
             for (Book book : myBorrowedBooks) {
@@ -46,7 +46,7 @@ public class Borrower extends User implements Serializable {
                         + DAYS.between(LocalDate.now(), book.getReturnDate())     // Returns how many days are between now and the return date
                         + " days left )" + ConsoleColor.RESET);
             }
-            if (!showBooksForLibrarian) {
+            if (!isLibrarian) {
                 readWhatBookToReturn();
             }
         } else {
