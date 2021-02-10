@@ -57,7 +57,7 @@ public class Program {
         int userInput;
         do {
             librarianMenuChoices();
-            userInput = Helpers.readUserInt(-1, 10);
+            userInput = Helpers.readUserInt(-1, 11);
             librarianMenuSwitch(userInput);
         } while (userInput != 0);
     }
@@ -82,6 +82,7 @@ public class Program {
                 + "\n7. List all borrowers"
                 + "\n8. List all librarians"
                 + "\n9. Find borrower by name"
+                + "\n10. Sort books by times borrowed"
                 + "\n0. Exit program\n"
         );
     }
@@ -103,15 +104,15 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All borrowed books");
-                library.showBooks(library.getAllBorrowedBooks(), "borrowed");
+                library.showBooks(library.getAllBorrowedBooks(), "borrowed", true);
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books");
-                library.showBooks(library.getAllBooks(), "");
+                library.showBooks(library.getAllBooks(), "", true);
             }
             case 3 -> {
                 Helpers.printMenuTitle("All available books");
-                library.showBooks(library.getAllAvailableBooks(), "available");
+                library.showBooks(library.getAllAvailableBooks(), "available", true);
             }
             case 4 -> {
                 Helpers.printMenuTitle("Add book to library");
@@ -137,6 +138,10 @@ public class Program {
                 Helpers.printMenuTitle("Find borrower by name");
                 library.findBorrowerByNameOrLibraryCardNo();
             }
+            case 10 -> {
+                Helpers.printMenuTitle("List most borrowed books");
+                library.sortBooks("times borrowed");
+            }
             case 0 -> FileUtil.writeObjectToFile("LibraryFile.ser", library);
             default -> Helpers.printWarning("Your choice does not exist, try again.");
         }
@@ -146,7 +151,7 @@ public class Program {
         switch (choice) {
             case 1 -> {
                 Helpers.printMenuTitle("All books");
-                callBorrowBook(library.showBooks(library.getAllBooks(), ""));
+                callBorrowBook(library.showBooks(library.getAllBooks(), "", false));
             }
             case 2 -> {
                 Helpers.printMenuTitle("All books sorted by title");
@@ -158,7 +163,7 @@ public class Program {
             }
             case 4 -> {
                 Helpers.printMenuTitle("All available books");
-                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available"));
+                callBorrowBook(library.showBooks(library.getAllAvailableBooks(), "available", false));
             }
             case 5 -> {
                 Helpers.printMenuTitle("Popular books");
@@ -181,7 +186,6 @@ public class Program {
                     ConsoleColor.RED_BOLD + "Your choice does not exist, try again." + ConsoleColor.RESET);
         }
     }
-
 
     private void callBorrowBook(HashMap<Integer, Book> numberedHashMap) {
         if (numberedHashMap.size() > 0) {

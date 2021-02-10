@@ -35,33 +35,27 @@ public class Book implements Serializable {
                 (returnDate != null ? "Return date: " + returnDate + "\n" : "");
     }
 
-    public String toString(String version) {
-        if (version.equals("available")) {
-            return "Title: " + title + "\n" +
-                    "Author: " + author.toString() + "\n" +
-                    "Description: " + bookDescription + "\n" +
-                    "ISBN: " + isbn + "\n";
-        } else if (version.equals("borrowed")){
-            return "Title: " + title + "\n" +
-                    "Author: " + author.toString() + "\n" +
-                    "Description: " + bookDescription + "\n" +
-                    "ISBN: " + isbn + "\n" +
-                    "Borrowed by: " + myBorrower.getLibraryCardNumber() + "\n" +
+    public String toString(String version, boolean isLibrarian) {
+        String returnString = "Title: " + title + "\n" +
+                "Author: " + author.toString() + "\n" +
+                "Description: " + bookDescription + "\n" +
+                "ISBN: " + isbn + "\n" +
+                (isLibrarian ? "Times borrowed: " + timesBorrowed + "\n" : "");
+        if (version.equals("borrowed")) {
+            returnString += "Borrowed by: " + myBorrower.getLibraryCardNumber() + "\n" +
                     "Return date: " + returnDate + "\n";
-        } else {
-            return "Title: " + title + "\n" +
-                    "Author: " + author.toString() + "\n" +
-                    "Description: " + bookDescription + "\n" +
-                    "ISBN: " + isbn + "\n" +
-                    "Available: " + (isAvailable ? "Yes" : "No") + "\n";
+        } else if (version.equals("")) {
+            returnString += "Available: " + (isAvailable ? "Yes" : "No" +
+                    "\nReturn date: " + returnDate) + "\n";
         }
+        return returnString;
     }
 
     public void borrowMe(Borrower currentBorrower) {
         setAvailable(false);
         setReturnDate(LocalDate.now().plusDays(isPopular() ? 14 : 28));
         setMyBorrower(currentBorrower);
-        timesBorrowed ++;
+        timesBorrowed++;
     }
 
     public void returnMe() {
@@ -106,5 +100,13 @@ public class Book implements Serializable {
         return isPopular;
     }
 
+    // only used by temporary book for presentation
+    public void setTimesBorrowed(int timesBorrowed) {
+        this.timesBorrowed = timesBorrowed;
+    }
+
+    public int getTimesBorrowed(){
+        return timesBorrowed;
+    }
 }
 
