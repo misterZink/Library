@@ -248,38 +248,43 @@ public class Library implements Serializable {
 
     public void findBorrowerByNameOrLibraryCardNo() {
         System.out.println("Enter name or library card number of the borrower:");
-        String userSearchPhrase = searchPhraseInput();
-        Borrower foundBorrower = null;
-        boolean matchFound = false;
+        Borrower foundBorrower = returnBorrowerIfFound(searchPhraseInput());
 
+        if (foundBorrower != null) {
+            printBorrowerInfo(foundBorrower);
+        }
+        else {
+            System.out.println("No such user found.");
+        }
+    }
+
+    private void printBorrowerInfo(Borrower borrower){
+        System.out.println("\nName: " + borrower.getName() +
+                "\nLibrary card no: " + borrower.getLibraryCardNumber());
+        if (borrower.myBorrowedBooks.size() > 0) {
+            System.out.println("Borrowed books:");
+            borrower.showMyBorrowedBooks(true);
+        }
+        else {
+            System.out.println(borrower.getName() + " has no borrowed books.");
+        }
+    }
+
+    private Borrower returnBorrowerIfFound(String userSearchPhrase){
+        Borrower foundBorrower = null;
         if (!userSearchPhrase.isEmpty()) {
             Pattern pattern = Pattern.compile(userSearchPhrase, Pattern.CASE_INSENSITIVE);
-
             for (Borrower borrower : allBorrowers.values()) {
                 Matcher matcher = pattern.matcher(borrower.getName().toLowerCase());
                 Matcher matcher2 = pattern.matcher(String.valueOf(borrower.getLibraryCardNumber()));
 
                 if (matcher.find() || matcher2.find()) {
-                    matchFound = true;
                     foundBorrower = borrower;
                     break;
                 }
             }
         }
-        if (matchFound) {
-            System.out.println("\nName: " + foundBorrower.getName() +
-                    "\nLibrary card no: " + foundBorrower.getLibraryCardNumber());
-            if (foundBorrower.myBorrowedBooks.size() > 0) {
-                System.out.println("Borrowed books:");
-                foundBorrower.showMyBorrowedBooks(true);
-            }
-            else {
-                System.out.println(foundBorrower.getName() + " has no borrowed books.");
-            }
-        }
-        else {
-            System.out.println("No such user found.");
-        }
+        return foundBorrower;
     }
 
     public void addLibrarianToLibrary(Librarian librarian) {
