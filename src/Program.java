@@ -120,7 +120,7 @@ public class Program {
             }
             case 5 -> {
                 Helpers.printMenuTitle("Remove book from library");
-                library.removeBook();
+                library.removeBookByTitle();
             }
             case 6 -> {
                 Helpers.printMenuTitle("Add new user to system");

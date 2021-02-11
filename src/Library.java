@@ -130,7 +130,9 @@ public class Library implements Serializable {
         return dialog;
     }
 
-    public void removeBook() {
+    // Need to write the whole title of the book and spelled correctly to be able to remove a book.
+    // This is so that you cant write only a small word like "ring" because otherwise it would remove all books that had ring inside title.
+    public void removeBookByTitle() {
         System.out.println("Enter title of the book you want to remove:");
         System.out.println("(or enter 0 to cancel and return to main menu.)");
         String bookTitle = Helpers.readUserString();
